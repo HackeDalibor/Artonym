@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Subject index{% endblock %}
+
+{% block body %}
+    <h1>Subject index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>CreationDate</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for subject in subjects %}
+            <tr>
+                <td>{{ subject.title }}</td>
+                <td>{{ subject.creationDate ? subject.creationDate|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_subject_show', {'id': subject.id}) }}">show</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_subject_new') }}">Create new</a>
+{% endblock %}
