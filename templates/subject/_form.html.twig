@@ -1,4 +1,23 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+    {{ form_row(form.title) }}
+    {{ form_row(form.category) }}
+
+    {# store the prototype on the data-prototype attribute #}
+    <ul id="email-fields-list"
+        data-prototype="{{ form_widget(form.images.vars.prototype)|e('html_attr') }}"
+        data-widget-tags="{{ '<li></li>'|e }}"
+        data-widget-counter="{{ form.images|length }}">
+    {% for image in form.images %}
+        <li>
+            {{ form_errors(image) }}
+            {{ form_widget(image) }}
+        </li>
+    {% endfor %}
+    </ul>
+
+    <button type="button"
+        class="add-another-collection-widget"
+        data-list-selector="#email-fields-list">Add another image</button>
+
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

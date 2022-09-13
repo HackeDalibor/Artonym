@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Messages
+{% endblock %}
+
+{% block body %}
+	<section class="container">
+		<div class="row">
+			<div class="col">
+				<h1>Messages</h1>
+				<p>Recieved : {{ app.user.recievedMessages|length }}</p>
+				<p>Sent : {{ app.user.sentMessages|length }}</p>
+				<a class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasExample" role="button" aria-controls="offcanvasExample">
+					See my files
+				</a>
+                <a href="{{path("send")}}" class="btn btn-primary">Send a message</a>
+			</div>
+		</div>
+	</section>
+{% endblock %}

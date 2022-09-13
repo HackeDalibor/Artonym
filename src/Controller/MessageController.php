@@ -16,7 +16,7 @@ class MessageController extends AbstractController
     #[Route('/', name: 'app_message_index', methods: ['GET'])]
     public function index(MessageRepository $messageRepository): Response
     {
-        return $this->render('message/index.html.twig', [
+        return $this->render('message/app.html.twig', [
             'messages' => $messageRepository->findAll(),
         ]);
     }
@@ -78,5 +78,88 @@ class MessageController extends AbstractController
         }
 
         return $this->redirectToRoute('app_message_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+
+    
+
+    #[Route('/send', name: 'send', methods: ['GET', 'POST'])]
+    public function send(Request $request): Response
+    {
+        $message = new Message;
+        // Création d'un nouvel objet "Message"
+
+        $form = $this->createForm(MessageType::class, $message);
+        // Création d'un formulaire en passant par la table "MessageFormType"
+        
+        $form->handleRequest($request);
+        // Pour procéder la data du form, on doit passer par la méthode de Symfony "handleRequest()"
+
+        if($form->isSubmitted() && $form->isValid()){
+        // Si le formulaire est rempli et qu'il est valide :
+
+            $message->setSender($this->getUser());
+            // L'envoyeur sera toujours l'utilisateur en cours d'utilisation (en session)
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($message);
+            $em->flush();
+
+            $this->addFlash("message", "Message envoyé avec succès.");
+            // Message de réussite
+            return $this->redirectToRoute("messages");
+            // On redirige vers la liste des messages
+        }
+
+        return $this->render("message/send.html.twig", [
+            "form" => $form->createView()
+        ]);
+    }
+
+
+    #[Route('/received', name: 'received', methods: ['GET'])]
+    public function received(): Response
+    {
+        return $this->render('message/recieved.html.twig');
+        // Voir les messages reçus
+    }
+
+
+
+    #[Route('/sent', name: 'sent', methods: ['GET'])]
+    public function sent(): Response
+    {
+        return $this->render('message/sent.html.twig');
+        // Voir les messages envoyés
+    }
+
+    
+    // #[Route('/read/{id}', name: 'read', methods: ['GET'])]
+    // public function read(Message $message): Response
+    // {
+        // $message->setIsRead(true);
+        // Passe l'attribut à true
+        // Le message est lu
+
+        // $em = $this->getDoctrine()->getManager();
+        // $em->persist($message);
+        // $em->flush();
+        // Entre la modification à la BDD
+
+        // return $this->render('message/read.html.twig', compact("message"));
+        // Rédirection
+    // }
+
+    #[Route('/deleted/{id}', name: 'deleted', methods: ['GET'])]
+    public function deleted(Message $message): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($message);
+        $em->flush();
+        // Efface le message de la BDD
+        // Automatiquement le message ne sera plus sur le naviguateur 
+
+        return $this->redirectToRoute("received");
+        // Rédirection
     }
 }
