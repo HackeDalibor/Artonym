@@ -29,7 +29,10 @@ class SubjectController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $subject->setUser($this->getUser());
+
+            $subject->getImages();
             
             $subjectRepository->add($subject, true);
 

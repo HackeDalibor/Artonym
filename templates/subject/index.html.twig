@@ -14,11 +14,12 @@
             </tr>
         </thead>
         <tbody>
+
         {% for subject in subjects %}
             <tr>
                 <td>{{ subject.title }}</td>
-                <td>{{ subject.creationDate ? subject.creationDate|date('Y-m-d') : '' }}</td>
-                <td>
+                <td>{{ subject.creationDate ? subject.creationDate }}</td>
+                <td> 
                     <a href="{{ path('app_subject_show', {'id': subject.id}) }}">show</a>
                 </td>
             </tr>

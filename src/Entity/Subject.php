@@ -33,7 +33,7 @@ class Subject
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
-    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Image::class)]
+    #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Image::class, cascade: ['persist', 'remove'])]
     private Collection $images;
 
     public function __construct()
