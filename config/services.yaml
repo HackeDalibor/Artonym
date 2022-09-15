@@ -12,6 +12,13 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
 
+    App\Services\FileUploader:
+        arguments:
+            $targetDirectory: '%images_directory%'
+
+
+
+
 
 
     # makes classes in src/ available to be used as services

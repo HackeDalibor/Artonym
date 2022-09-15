@@ -2,8 +2,12 @@
 
 namespace App\Controller;
 
+use App\Entity\Image;
 use App\Entity\Subject;
+use App\Form\ImageType;
 use App\Form\SubjectType;
+use App\Services\FileUploader;
+use App\Repository\ImageRepository;
 use App\Repository\SubjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,7 +16,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
-use App\Repository\ImageRepository;
 
 #[Route('/subject')]
 class SubjectController extends AbstractController
@@ -25,8 +28,52 @@ class SubjectController extends AbstractController
         ]);
     }
 
+    #[Route('/multipleImageInsert/{id}', name: 'app_subject_multiple_instert')]
+    public function multipleImageInsert(Request $request, SubjectRepository $subjectRepository,
+                        SluggerInterface $slugger, int $id, EntityManagerInterface $em)
+    {
+        $subject = $subjectRepository->findOneBy(['id' => $id]);
+        $form = $this->createForm(ImageType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $imgs = $form->get('data')->getViewData();
+
+            if (!empty($imgs)) {
+                foreach ($imgs as  $img) {
+
+                    $image = new Image();
+                    $originalFilename =  pathinfo($img->getClientOriginalName(), PATHINFO_FILENAME);
+                    $safeFilename = $slugger->slug($originalFilename);
+                    $data = $safeFilename.'-'.uniqid(). '.' . $img->guessExtension();
+
+                    try {
+                        $img->move(
+                            $this->getParameter('images_directory'),
+                            $data
+                        );
+                    } catch (fileException $e) {}
+
+                    $image->setData($data);
+                    $image->setSubject($subject);
+                    $em->persist($image);
+                    $em->flush();
+                }
+
+                return $this->redirectToRoute('app_subject_index', [], Response::HTTP_SEE_OTHER);
+
+            }
+            
+        }
+        
+        return $this->render('subject/newMultiple.html.twig',[
+            'subject' => $subject,
+            'form' => $form->createView(),
+        ]);
+    }
+
     #[Route('/new', name: 'app_subject_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, SubjectRepository $subjectRepository, EntityManagerInterface $objectManager, SluggerInterface $slugger, ImageRepository $imageRepository): Response
+    public function new(Request $request, SubjectRepository $subjectRepository, EntityManagerInterface $objectManager, FileUploader $fileUploader): Response
     {
         $subject = new Subject();
         $form = $this->createForm(SubjectType::class, $subject);
@@ -43,7 +90,6 @@ class SubjectController extends AbstractController
             
             $imageFiles = $form->get('images')->getData();
 
-            dd($form->get('images')->getViewData());
             
             foreach($images as $image)
             {
@@ -52,33 +98,16 @@ class SubjectController extends AbstractController
 
                 // $image->setSubject($subject);
                 // $objectManager->persist($image);
-
+                
                 foreach($imageFiles as $imageFile){
+                    // dd($imageFile);
                     if($imageFile){
 
-                        $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                        // this is needed to safely include the file name as part of the URL
-                        $safeFilename = $slugger->slug($originalFilename);
-                        $data = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
-
-                        // Move the file to the directory where brochures are stored
-                        try {
-                            $imageFile->move(
-                                $this->getParameter('images_directory'),
-                                $data
-                            );
-                        } catch (FileException $e) {
-                            // ... handle exception if something happens during file upload
+                       
+                        if ($imageFile) {
+                            $data = $fileUploader->upload($imageFile);
+                            $image->setData($data);
                         }
-
-                        // updates the 'data' property to store the jpeg file name
-                        // instead of its contents
-                        $image->setData($data);
-
-
-                        $imageRepository->add($image, true);
-
-                        return $this->redirectToRoute('app_image_index', [], Response::HTTP_SEE_OTHER);
 
                     }
                 }
