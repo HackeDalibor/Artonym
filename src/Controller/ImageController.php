@@ -5,10 +5,12 @@ namespace App\Controller;
 use App\Entity\Image;
 use App\Form\ImageType;
 use App\Repository\ImageRepository;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/image')]
 class ImageController extends AbstractController
@@ -22,16 +24,46 @@ class ImageController extends AbstractController
     }
 
     #[Route('/new', name: 'app_image_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, ImageRepository $imageRepository): Response
+    public function new(Request $request, ImageRepository $imageRepository, SluggerInterface $slugger): Response
     {
         $image = new Image();
         $form = $this->createForm(ImageType::class, $image);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $imageRepository->add($image, true);
+            $imageFile = $form->get('data')->getData();
 
-            return $this->redirectToRoute('app_image_index', [], Response::HTTP_SEE_OTHER);
+            //  this condition is needed because the 'brochure' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($imageFile) {
+                
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $data = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
+                // Move the file to the directory where brochures are stored
+                try {
+                    $imageFile->move(
+                        $this->getParameter('images_directory'),
+                        $data
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'data' property to store the jpeg file name
+                // instead of its contents
+                $image->setData($data);
+
+
+                $imageRepository->add($image, true);
+
+                return $this->redirectToRoute('app_image_index', [], Response::HTTP_SEE_OTHER);
+
+
+
+            }
         }
 
         return $this->renderForm('image/new.html.twig', [
