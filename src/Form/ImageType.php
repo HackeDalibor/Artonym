@@ -23,6 +23,8 @@ class ImageType extends AbstractType
                 // make it optional so you don't have to re-upload the PDF file
                 // every time you edit the Product details
                 'required' => false,
+                
+                'multiple' => true,
 
                 // unmapped fields can't define their validation using annotations
                 // in the associated entity, so you can use the PHP constraint classes
@@ -33,8 +35,6 @@ class ImageType extends AbstractType
                             'image/gif',
                             'image/jpeg',
                             'image/png',
-                            'image/svg+xml',
-                            'image/webp',
                         ],
                         'mimeTypesMessage' => 'The file type of the file is invalid ({{ type }}). Allowed file types are {{ types }}.',
                     ])

@@ -28,18 +28,22 @@ class SubjectController extends AbstractController
         ]);
     }
 
-    #[Route('/multipleImageInsert/{id}', name: 'app_subject_multiple_instert')]
-    public function multipleImageInsert(Request $request, SubjectRepository $subjectRepository,
-                        SluggerInterface $slugger, int $id, EntityManagerInterface $em)
+    #[Route('/multipleImageInsert/', name: 'app_subject_multiple_instert')]
+    public function multipleImageInsert(Request $request, SluggerInterface $slugger,
+                                        EntityManagerInterface $em)
     {
-        $subject = $subjectRepository->findOneBy(['id' => $id]);
-        $form = $this->createForm(ImageType::class);
+        $subject =  new Subject();
+        $form = $this->createForm(SubjectType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $imgs = $form->get('data')->getViewData();
+            $subject->setTitle($form->get('title')->getViewData());
 
-            if (!empty($imgs)) {
+            $em->persist($subject);
+
+            $imgs = $form->get('images')->get('data')->getViewData();
+
+            if (empty($imgs) === false) {
                 foreach ($imgs as  $img) {
 
                     $image = new Image();
@@ -53,23 +57,20 @@ class SubjectController extends AbstractController
                             $data
                         );
                     } catch (fileException $e) {}
-
                     $image->setData($data);
                     $image->setSubject($subject);
                     $em->persist($image);
-                    $em->flush();
                 }
+                    $em->flush();
 
-                return $this->redirectToRoute('app_subject_index', [], Response::HTTP_SEE_OTHER);
-
+                    return $this->redirectToRoute('app_subject_index', [], Response::HTTP_SEE_OTHER);
+                    
+                }
             }
-            
-        }
-        
-        return $this->render('subject/newMultiple.html.twig',[
-            'subject' => $subject,
-            'form' => $form->createView(),
-        ]);
+            return $this->renderForm('subject/newMultiple.html.twig', [
+                'subject' => $subject,
+                'form' => $form,
+            ]);           
     }
 
     #[Route('/new', name: 'app_subject_new', methods: ['GET', 'POST'])]

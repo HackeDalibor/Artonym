@@ -22,7 +22,7 @@ class Message
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $dateSent = null;
 
-    #[ORM\ManyToOne(inversedBy: 'messages')]
+    #[ORM\ManyToOne(inversedBy: 'sentMessages')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $sender = null;
 
