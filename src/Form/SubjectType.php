@@ -19,11 +19,11 @@ class SubjectType extends AbstractType
         $builder
             ->add('title', TextType::class)
             ->add('category', ChoiceType::class)
-            ->add('images', ImageType::class //, [
-                // 'multiple' => true
+            ->add('images', ImageMultipleType::class , [
+                'mapped' => false
                 // 'entry_type' => ImageType::class,
-                // 'allow_add' => true,]
-            )
+                // 'allow_add' => true,
+            ])
         ;
     }
 
