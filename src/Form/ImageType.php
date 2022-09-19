@@ -25,20 +25,6 @@ class ImageType extends AbstractType
                 'required' => false,
                 
                 'multiple' => true,
-
-                // unmapped fields can't define their validation using annotations
-                // in the associated entity, so you can use the PHP constraint classes
-                'constraints' => [
-                    new File([
-                        'maxSize' => '4096k',
-                        'mimeTypes' => [
-                            'image/gif',
-                            'image/jpeg',
-                            'image/png',
-                        ],
-                        'mimeTypesMessage' => 'The file type of the file is invalid ({{ type }}). Allowed file types are {{ types }}.',
-                    ])
-                ],
             ])
         ;
     }

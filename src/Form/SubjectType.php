@@ -21,8 +21,6 @@ class SubjectType extends AbstractType
             ->add('category', ChoiceType::class)
             ->add('images', ImageMultipleType::class , [
                 'mapped' => false
-                // 'entry_type' => ImageType::class,
-                // 'allow_add' => true,
             ])
         ;
     }
