@@ -30,9 +30,16 @@ class Message
     #[ORM\JoinColumn(nullable: false)]
     private ?User $reciever = null;
 
+    #[ORM\Column]
+    private ?bool $isRead = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $title = null;
+
     public function __construct()
     {
         $this->dateSent = new DateTime("now", new DateTimeZone('Europe/Paris'));
+        $this->isRead = 0;
     }
 
     public function getId(): ?int
@@ -92,5 +99,29 @@ class Message
     public function __toString()
     {
         return $this->content;
+    }
+
+    public function isIsRead(): ?bool
+    {
+        return $this->isRead;
+    }
+
+    public function setIsRead(bool $isRead): self
+    {
+        $this->isRead = $isRead;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
     }
 }

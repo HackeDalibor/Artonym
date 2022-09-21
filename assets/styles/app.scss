@@ -1,11 +1,56 @@
-body {
-    background-color: white;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-a {
-    color: tomato;
+body {
+    background-color: rgb(209, 244, 255);
+}
+
+// *** Header ***
+header {
+    height: 100px;
+    width: 100%;
+    position: absolute;
+    margin-top: 30px;
+    background: linear-gradient(95.08deg, #AEECFF -7.05%, #FFBF9B 103.09%);;
+}
+
+nav {
+    width: 100%;
+    height: 100%;
+}
+
+ul {
+    height: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 
 li {
     display: block;
+}
+
+a {
+    color: rgb(55, 79, 109);
+}
+
+img {
+    height: 150px;
+    width: 150px;
+}
+// *** End of Header ***
+
+// *** Main ***
+main {
+    padding-top: 175px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+h1 {
+    color: rgb(55, 79, 109);
 }
