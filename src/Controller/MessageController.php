@@ -22,75 +22,12 @@ class MessageController extends AbstractController
         ]);
     }
 
-    // #[Route('/new', name: 'app_message_new', methods: ['GET', 'POST'])]
-    // public function new(Request $request, MessageRepository $messageRepository): Response
-    // {
-    //     $message = new Message();
-    //     $form = $this->createForm(MessageType::class, $message);
-    //     $form->handleRequest($request);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-
-    //         $message->setSender($this->getUser());
-
-
-    //         $messageRepository->add($message, true);
-
-    //         return $this->redirectToRoute('app_message_index', [], Response::HTTP_SEE_OTHER);
-    //     }
-
-    //     return $this->renderForm('message/new.html.twig', [
-    //         'message' => $message,
-    //         'form' => $form,
-    //     ]);
-    // }
-
-    // #[Route('/{id}', name: 'app_message_show', methods: ['GET'])]
-    // public function show(Message $message): Response
-    // {
-    //     return $this->render('message/show.html.twig', [
-    //         'message' => $message,
-    //     ]);
-    // }
-
-    // #[Route('/{id}/edit', name: 'app_message_edit', methods: ['GET', 'POST'])]
-    // public function edit(Request $request, Message $message, MessageRepository $messageRepository): Response
-    // {
-    //     $form = $this->createForm(MessageType::class, $message);
-    //     $form->handleRequest($request);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         $messageRepository->add($message, true);
-
-    //         return $this->redirectToRoute('app_message_index', [], Response::HTTP_SEE_OTHER);
-    //     }
-
-    //     return $this->renderForm('message/edit.html.twig', [
-    //         'message' => $message,
-    //         'form' => $form,
-    //     ]);
-    // }
-
-    // #[Route('/{id}', name: 'app_message_delete', methods: ['POST'])]
-    // public function delete(Request $request, Message $message, MessageRepository $messageRepository): Response
-    // {
-    //     if ($this->isCsrfTokenValid('delete'.$message->getId(), $request->request->get('_token'))) {
-    //         $messageRepository->remove($message, true);
-    //     }
-
-    //     return $this->redirectToRoute('app_message_index', [], Response::HTTP_SEE_OTHER);
-    // }
-
-
-    
-
-    #[Route('/send', name: 'send', methods: ['GET', 'POST'])]
+    #[Route('/send', name: 'app_message_send', methods: ['GET', 'POST'])]
     public function send(Request $request, EntityManagerInterface $em): Response
     {
 
         $user = $this->getUser();
 
-        // dd($this->getUser());
         $message = new Message;
         // Création d'un nouvel objet "Message"
 
@@ -123,7 +60,7 @@ class MessageController extends AbstractController
     }
 
 
-    #[Route('/received', name: 'received', methods: ['GET'])]
+    #[Route('/received', name: 'app_message_received', methods: ['GET'])]
     public function received(): Response
     {
         return $this->render('message/recieved.html.twig');
@@ -132,7 +69,7 @@ class MessageController extends AbstractController
 
 
 
-    #[Route('/sent', name: 'sent', methods: ['GET'])]
+    #[Route('/sent', name: 'app_message_sent', methods: ['GET'])]
     public function sent(): Response
     {
         return $this->render('message/sent.html.twig');
@@ -140,7 +77,7 @@ class MessageController extends AbstractController
     }
 
     
-    #[Route('/read/{id}', name: 'read', methods: ['GET'])]
+    #[Route('/read/{id}', name: 'app_message_read', methods: ['GET'])]
     public function read(Message $message, EntityManagerInterface $em): Response
     {
         $message->setIsRead(true);
@@ -154,16 +91,16 @@ class MessageController extends AbstractController
         return $this->render('message/read.html.twig', compact("message"));
     }
 
-    #[Route('/deleted/{id}', name: 'deleted', methods: ['GET'])]
+    #[Route('/delete/{id}', name: 'app_message_delete', methods: ['GET'])]
     public function deleted(Message $message, EntityManagerInterface $em): Response
     {
  
         $em->remove($message);
         $em->flush();
         // Delete a message from DB
-        // Automatically the message will dissapear online 
+        // The message will automatically dissapear online 
 
-        return $this->redirectToRoute("received");
+        return $this->redirectToRoute("app_message_received");
         // Redirection
     }
 }

@@ -62,6 +62,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
     private ?Image $image = null;
 
+    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'following')]
+    private Collection $followers;
+
+    #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'followers')]
+    private Collection $following;
+
     public function __construct()
     {
         $this->subjects = new ArrayCollection();
@@ -70,6 +76,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->comments = new ArrayCollection();
         $this->inscriptionDate = new DateTime("now", new DateTimeZone('Europe/Paris'));
         $this->status = false;
+        $this->followers = new ArrayCollection();
+        $this->following = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -331,7 +339,58 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+    
+    /**
+     * @return Collection<int, self>
+     */
+    public function getFollowers(): Collection
+    {
+        return $this->followers;
+    }
+    
+    public function addFollower(self $follower): self
+    {
+        if (!$this->followers->contains($follower)) {
+            $this->followers->add($follower);
+        }
 
+        return $this;
+    }
+    
+    public function removeFollower(self $follower): self
+    {
+        $this->followers->removeElement($follower);
+        
+        return $this;
+    }
+    
+    /**
+     * @return Collection<int, self>
+     */
+    public function getFollowing(): Collection
+    {
+        return $this->following;
+    }
+    
+    public function addFollowing(self $following): self
+    {
+        if (!$this->following->contains($following)) {
+            $this->following->add($following);
+            $following->addFollower($this);
+        }
+        
+        return $this;
+    }
+    
+    public function removeFollowing(self $following): self
+    {
+        if ($this->following->removeElement($following)) {
+            $following->removeFollower($this);
+        }
+        
+        return $this;
+    }
+    
     public function __toString()
     {
         return $this->nickname;

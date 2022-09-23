@@ -61,6 +61,8 @@ class SubjectController extends AbstractController
                     $image->setSubject($subject);
                     $em->persist($image);
                 }
+
+                    $subject->setUser($this->getUser());
                     $em->flush();
 
                     return $this->redirectToRoute('app_subject_index', [], Response::HTTP_SEE_OTHER);

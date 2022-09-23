@@ -9,7 +9,7 @@
     <p>{{ subject.creationDate }}</p>
 
     {% for image in subject.images %}
-        <p>{{ image }}</p>
+        <img src="{{ asset('uploads/images/userimage/') }}{{ image }}" alt="{{ image }}">
     {% endfor %}
 
     <h2>COMMENTS</h2>

@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+    <h1>{{ user.nickname }}</h1>
+
+    {% if user.followers.contains(app.user) %}
+        <a class="follow-user" href="{{ path('app_user_unfollow', {id: user.id}) }}">Unfollow</a>
+    {% else %}
+        <a class="follow-user" href="{{ path('app_user_follow', {id: user.id}) }}">Follow</a>
+    {% endif %}
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th>Roles</th>
+                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+            </tr>
+            <tr>
+                <th>InscriptionDate</th>
+                <td>{{ user.inscriptionDate }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ user.status ? 'Yes' : 'No' }}</td>
+            </tr>
+            <tr>
+                <th>IsVerified</th>
+                <td>{{ user.isVerified ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    {% for subject in user.subjects %}
+        <p>{{ subject }}</p>
+    {% endfor %}
+
+    <a href="{{ path('app_user_index') }}">back to list</a>
+
+    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+
+    {{ include('user/_delete_form.html.twig') }}
+{% endblock %}
