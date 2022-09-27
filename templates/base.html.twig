@@ -22,11 +22,12 @@
             <nav>
                 <ul>
                     <li><a href="{{ path('app_home') }}"><img src="{{ asset('uploads/images/siteimage/artonym_logo.png') }}" alt="artonym logo"></a></li>
-                    <li><a href="{{ path('app_subject_index') }}">Subjects</a></li>
-                    <li><a href="{{ path('app_category_index') }}">Categories</a></li>
-                    <li><a href="{{ path('app_user_index') }}">Users</a></li>
-                    <li><a href="{{ path('app_message_index') }}"><i class="fa-regular fa-message"></i></a></li>
                     {% if app.user %}
+                        <li><a href="{{ path('app_subject_index') }}">Subjects</a></li>
+                        <li><a href="{{ path('app_category_index') }}">Categories</a></li>
+                        <li><a href="{{ path('app_user_index') }}">Users</a></li>
+                        <li><a href="{{ path('app_user_profile') }}">Profile</a></li>
+                        <li><a href="{{ path('app_message_index') }}"><i class="fa-regular fa-message"></i></a></li>
                         <li><a href="{{ path('app_logout') }}"><i class="fa-solid fa-right-from-bracket"></i></a></li>
                     {% else %}
                         <li><a href="{{ path('app_register') }}">Register</a></li>

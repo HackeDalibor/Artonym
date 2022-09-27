@@ -29,8 +29,7 @@ class SubjectController extends AbstractController
     }
 
     #[Route('/multipleImageInsert/', name: 'app_subject_multiple_instert')]
-    public function multipleImageInsert(Request $request, SluggerInterface $slugger,
-                                        EntityManagerInterface $em)
+    public function multipleImageInsert(Request $request, SluggerInterface $slugger, EntityManagerInterface $em)
     {
         $subject =  new Subject();
         $form = $this->createForm(SubjectType::class);
@@ -57,6 +56,7 @@ class SubjectController extends AbstractController
                             $data
                         );
                     } catch (fileException $e) {}
+
                     $image->setData($data);
                     $image->setSubject($subject);
                     $em->persist($image);

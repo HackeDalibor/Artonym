@@ -164,7 +164,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getInscriptionDate(): string
     {
-        return $this->inscriptionDate->format("H:i:s d/m/Y");
+        return $this->inscriptionDate->format("d/m/Y");
     }
 
     public function setInscriptionDate(\DateTimeInterface $inscriptionDate): self

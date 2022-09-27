@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+    <h1>{{ user.nickname }}</h1>
+    <h3>Joined us on : {{ user.inscriptionDate }}</h3>
+    <p>{{ user.email }} ({{ user.isVerified ? 'Verified' : 'Not verified yet' }})</p>
+    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+
+    <p>Followers : {{ user.followers|length }}</p>
+    <p>Following : {{ user.following|length }}</p>
+
+
+    {% for subject in user.subjects %}
+        <p>{{ subject }}</p>
+    {% endfor %}
+
+    {{ include('user/_delete_form.html.twig') }}
+{% endblock %}
