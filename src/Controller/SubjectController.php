@@ -63,6 +63,9 @@ class SubjectController extends AbstractController
                 }
 
                     $subject->setUser($this->getUser());
+
+                    //TODO : Ici envoi d'email à user et création de notif
+
                     $em->flush();
 
                     return $this->redirectToRoute('app_subject_index', [], Response::HTTP_SEE_OTHER);

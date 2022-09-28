@@ -37,7 +37,10 @@
     </table>
 
     {% for subject in user.subjects %}
-        <p>{{ subject }}</p>
+        <section class="section">
+
+            <p>{{ subject }}</p>
+        </section>
     {% endfor %}
 
     <a href="{{ path('app_user_index') }}">back to list</a>

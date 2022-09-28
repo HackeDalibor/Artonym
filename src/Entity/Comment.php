@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use DateTime;
 use DateTimeZone;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CommentRepository;
@@ -30,9 +32,13 @@ class Comment
     #[ORM\JoinColumn(nullable: false)]
     private ?Subject $subject = null;
 
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'likesComment')]
+    private Collection $likedBy;
+
     public function __construct()
     {
         $this->commentDate = new DateTime("now", new DateTimeZone('Europe/Paris'));
+        $this->likedBy = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -92,5 +98,32 @@ class Comment
     public function __toString()
     {
         return $this->text;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getLikedBy(): Collection
+    {
+        return $this->likedBy;
+    }
+
+    public function addLikedBy(User $likedBy): self
+    {
+        if (!$this->likedBy->contains($likedBy)) {
+            $this->likedBy->add($likedBy);
+            $likedBy->addLikesComment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLikedBy(User $likedBy): self
+    {
+        if ($this->likedBy->removeElement($likedBy)) {
+            $likedBy->removeLikesComment($this);
+        }
+
+        return $this;
     }
 }
