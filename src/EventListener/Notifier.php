@@ -1,31 +1,29 @@
 <?php
 
-    // src/EventListener/Notifier.php
-    namespace App\EventListener;
+namespace App\EventListener;
+use App\Entity\Notification;
+use Doctrine\ORM\Event\OnFlushEventArgs;
 
-    use App\Entity\Notification;
-    use Doctrine\Persistence\Event\LifecycleEventArgs;
-
-    class Notifier
+class Notifier
+{
+    public function onFlush(OnFlushEventArgs $eventArgs)
     {
-        // the listener methods receive an argument which gives you access to
-        // both the entity object of the event and the entity manager itself
-        public function postPersist(LifecycleEventArgs $args): void
+        $om = $eventArgs->getObjectManager();
+        foreach($om->getUnitOfWork()->getScheduledEntityInsertions() as $object)
         {
-            $entity = $args->getObject();
+            if(get_class($object) === 'App\Entity\Subject')
+            {
+                if(null !== $object->getUser()->getFollowers())
+                {
+                    foreach($object->getUser()->getFollowers() as $follower)
+                    {
+                        // Appeler la création de la notification et mettre en param getClassObject
+                    }
 
-            // if this listener only applies to certain entity types,
-            // add some code to check the entity type as early as possible
-            if (!$entity instanceof Notification) {
-                return;
+                }
             }
-
-            $entityManager = $args->getObjectManager();
-            //? ... do something with the Notification entity
         }
     }
-
-
-
+}
 
 ?>

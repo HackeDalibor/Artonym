@@ -2,12 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Category;
 use App\Entity\Image;
 use App\Entity\Subject;
-use App\Form\ImageType;
 use App\Form\SubjectType;
 use App\Services\FileUploader;
-use App\Repository\ImageRepository;
 use App\Repository\SubjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +27,7 @@ class SubjectController extends AbstractController
         ]);
     }
 
-    #[Route('/multipleImageInsert/', name: 'app_subject_multiple_instert')]
+    #[Route('/multipleImageInsert', name: 'app_subject_multiple_instert', methods: ['GET', 'POST'])]
     public function multipleImageInsert(Request $request, SluggerInterface $slugger, EntityManagerInterface $em)
     {
         $subject =  new Subject();
@@ -37,16 +36,23 @@ class SubjectController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $subject->setTitle($form->get('title')->getViewData());
+            // $subject->setCategory($form->get('category')->getViewData());
 
             $em->persist($subject);
 
+            //* Images taken from our view Form
             $imgs = $form->get('images')->get('data')->getViewData();
 
+            //* We need some images for new posts so I made an if method wich says :
+            //* if our variable $imgs isn't empty, we proceed.
             if (empty($imgs) === false) {
+
+                //* For each image we find in $imgs :
                 foreach ($imgs as  $img) {
 
+                    //* We're creating a new object "Image"
                     $image = new Image();
-                    $originalFilename =  pathinfo($img->getClientOriginalName(), PATHINFO_FILENAME);
+                    $originalFilename = pathinfo($img->getClientOriginalName(), PATHINFO_FILENAME);
                     $safeFilename = $slugger->slug($originalFilename);
                     $data = $safeFilename.'-'.uniqid(). '.' . $img->guessExtension();
 

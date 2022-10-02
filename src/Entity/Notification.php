@@ -16,15 +16,15 @@ class Notification
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
-
     #[ORM\Column(length: 50)]
     private ?string $module = null;
 
     #[ORM\Column]
     private ?bool $isRead = false;
+
+    #[ORM\ManyToOne(inversedBy: 'notifications')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
 
     public function getId(): ?int
     {
@@ -77,5 +77,10 @@ class Notification
         $this->isRead = $isRead;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->description;
     }
 }

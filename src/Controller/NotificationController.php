@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Notification;
-use App\Form\NotificationType;
 use App\Repository\NotificationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,24 +12,33 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/notification')]
 class NotificationController extends AbstractController
 {
+    #[Route('/list', name: 'app_notification_list', methods: ['GET'])]
+    public function list(NotificationRepository $notificationRepository)
+    {
+        return $this->render('notification/index.html.twig', [
+            'notifications' => $notificationRepository->findAll(),
+        ]);
+    }
 
     #[Route('/new', name: 'app_notification_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, NotificationRepository $notificationRepository): Response
+    public function new(NotificationRepository $notificationRepository, string $module = 'toto'): Response
     {
-        $notification = new Notification();
-        $form = $this->createForm(NotificationType::class, $notification);
-        $form->handleRequest($request);
+        $user = $this->getUser();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $notificationRepository->add($notification, true);
-
-            return $this->redirectToRoute('app_notification_index', [], Response::HTTP_SEE_OTHER);
+        foreach($user->getFollowers() as $follower)
+        {
+            $notification = new Notification();
+            $notification->setDescription($user->getNickname()." a crée un nouveau post.");
+            $notification->setModule($module);
+            $notification->setUser($follower);
         }
+        
+        //? Envoyer les notifs aux users
 
-        return $this->renderForm('notification/new.html.twig', [
-            'notification' => $notification,
-            'form' => $form,
-        ]);
+        $notificationRepository->add($notification, true);
+
+        return $this->redirectToRoute('app_subject_index', [], Response::HTTP_SEE_OTHER);
+        
     }
 
     #[Route('/{id}', name: 'app_notification_delete', methods: ['POST'])]
@@ -40,6 +48,6 @@ class NotificationController extends AbstractController
             $notificationRepository->remove($notification, true);
         }
 
-        return $this->redirectToRoute('app_notification_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_subject_index', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -35,7 +35,7 @@ services:
         tags:
             - 
                 name: doctrine.event_listener
-                event: on
+                event: onFlush
                 entity: 'App\Entity\Notification'
 
 
