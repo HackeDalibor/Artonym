@@ -21,21 +21,24 @@
                 </div>
             </li>
 
-            
-
             <li class="nav-dots">
                 <label for="img-1" class="nav-dot" id="img-dot-1"></label>
             </li>
             
         {% endfor %}
     </ul>
+    <p>{{ subject.comments|length }} comments</p>
 
     <h2>COMMENTS</h2>
     {% for comment in subject.comments %}
         <p>{{ comment }}</p>
     {% endfor %}
 
-    {% block comment %}{% endblock %}
+    {{ form_start(form) }}
+        {{ form_widget(form.text) }}
+        <button type="submit">Send</button>
+    {{ form_end(form) }}
+
 
     <a href="{{ path('app_subject_index') }}">back to list</a>
 

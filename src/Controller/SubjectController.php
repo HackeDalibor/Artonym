@@ -2,12 +2,17 @@
 
 namespace App\Controller;
 
-use App\Entity\Category;
 use App\Entity\Image;
 use App\Entity\Subject;
+use App\Entity\Category;
+use App\Entity\Comment;
+use App\Form\CommentType;
 use App\Form\SubjectType;
+use App\Repository\CommentRepository;
+use App\Repository\ImageRepository;
 use App\Services\FileUploader;
 use App\Repository\SubjectRepository;
+use App\Services\NotificationService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,8 +32,9 @@ class SubjectController extends AbstractController
         ]);
     }
 
-    #[Route('/multipleImageInsert', name: 'app_subject_multiple_instert', methods: ['GET', 'POST'])]
-    public function multipleImageInsert(Request $request, SluggerInterface $slugger, EntityManagerInterface $em)
+    #[Route('/new', name: 'app_subject_new', methods: ['GET', 'POST'])]
+    public function multipleImageInsert(Request $request, SluggerInterface $slugger, SubjectRepository $subjectRepository,
+                                        ImageRepository $imageRepository, NotificationService $notificationService)
     {
         $subject =  new Subject();
         $form = $this->createForm(SubjectType::class);
@@ -38,7 +44,9 @@ class SubjectController extends AbstractController
             $subject->setTitle($form->get('title')->getViewData());
             // $subject->setCategory($form->get('category')->getViewData());
 
-            $em->persist($subject);
+            $user = $this->getUser();
+            $subject->setUser($user);
+            $subjectRepository->add($subject);
 
             //* Images taken from our view Form
             $imgs = $form->get('images')->get('data')->getViewData();
@@ -65,85 +73,44 @@ class SubjectController extends AbstractController
 
                     $image->setData($data);
                     $image->setSubject($subject);
-                    $em->persist($image);
+                    $imageRepository->add($image, true);
                 }
 
-                    $subject->setUser($this->getUser());
+                $notificationService->newNotification($subject, $user);
+                
+                //TODO : Ici envoi d'email à user
 
-                    //TODO : Ici envoi d'email à user et création de notif
-
-                    $em->flush();
-
-                    return $this->redirectToRoute('app_subject_index', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('app_subject_index', [], Response::HTTP_SEE_OTHER);
                     
                 }
             }
-            return $this->renderForm('subject/newMultiple.html.twig', [
+            return $this->renderForm('subject/new.html.twig', [
                 'subject' => $subject,
                 'form' => $form,
             ]);           
     }
 
-    #[Route('/new', name: 'app_subject_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, SubjectRepository $subjectRepository, EntityManagerInterface $objectManager, FileUploader $fileUploader): Response
+    #[Route('/{id}', name: 'app_subject_show', methods: ['GET', 'POST'])]
+    public function show(Request $request, Subject $subject, CommentRepository $commentRepository,
+                        NotificationService $notificationService): Response
     {
-        $subject = new Subject();
-        $form = $this->createForm(SubjectType::class, $subject);
+        $comment = new Comment();
+        $user = $this->getUser();
+        $form = $this->createForm(CommentType::class);
         $form->handleRequest($request);
-        
-        
-        
-        if ($form->isSubmitted() && $form->isValid()) {
-            
-            $subject->setUser($this->getUser());
-            $images = $subject->getImages();
-            // $subjectRepository->add($subject, true);
-            
-            
-            $imageFiles = $form->get('images')->getData();
 
-            
-            foreach($images as $image)
-            {
-                
-                // $image->setData($imageFile);
-
-                // $image->setSubject($subject);
-                // $objectManager->persist($image);
-                
-                foreach($imageFiles as $imageFile){
-                    // dd($imageFile);
-                    if($imageFile){
-
-                       
-                        if ($imageFile) {
-                            $data = $fileUploader->upload($imageFile);
-                            $image->setData($data);
-                        }
-
-                    }
-                }
-
-            }
-
-            $objectManager->flush();
-
-            return $this->redirectToRoute('app_subject_index', [], Response::HTTP_SEE_OTHER);
-        
-
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $comment->setText($form->get('text')->getViewData());
+            $comment->setUser($user);
+            $comment->setSubject($subject);
+            $commentRepository->add($comment, true);
+            $notificationService->newNotification($comment, $subject->getUser());
         }
 
-        return $this->renderForm('subject/new.html.twig', [
-            'subject' => $subject,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_subject_show', methods: ['GET'])]
-    public function show(Subject $subject): Response
-    {
         return $this->render('subject/show.html.twig', [
             'subject' => $subject,
+            'form' => $form->createView(),
         ]);
     }
 

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Notification;
 use App\Repository\NotificationRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,15 +14,24 @@ use Symfony\Component\Routing\Annotation\Route;
 class NotificationController extends AbstractController
 {
     #[Route('/list', name: 'app_notification_list', methods: ['GET'])]
-    public function list(NotificationRepository $notificationRepository)
+    public function list(NotificationRepository $notificationRepository, EntityManagerInterface $em)
     {
+
+        foreach($this->getUser()->getNotifications() as $notification)
+        {
+            $notification->setIsRead(1);
+            $em->persist($notification);
+        }
+
+        $em->flush();
+
         return $this->render('notification/index.html.twig', [
             'notifications' => $notificationRepository->findAll(),
         ]);
     }
 
     #[Route('/new', name: 'app_notification_new', methods: ['GET', 'POST'])]
-    public function new(NotificationRepository $notificationRepository, string $module = 'toto'): Response
+    public function new(NotificationRepository $notificationRepository): Response
     {
         $user = $this->getUser();
 
@@ -29,12 +39,12 @@ class NotificationController extends AbstractController
         {
             $notification = new Notification();
             $notification->setDescription($user->getNickname()." a crée un nouveau post.");
-            $notification->setModule($module);
             $notification->setUser($follower);
+
+            //* Sends notifications to users
+            $follower->addNotification($notification);
         }
         
-        //? Envoyer les notifs aux users
-
         $notificationRepository->add($notification, true);
 
         return $this->redirectToRoute('app_subject_index', [], Response::HTTP_SEE_OTHER);

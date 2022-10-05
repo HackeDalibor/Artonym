@@ -13,7 +13,6 @@ class NotificationType extends AbstractType
     {
         $builder
             ->add('description')
-            ->add('module')
             ->add('isRead')
             ->add('user')
         ;

@@ -16,9 +16,6 @@ class Notification
     #[ORM\Column(length: 255)]
     private ?string $description = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $module = null;
-
     #[ORM\Column]
     private ?bool $isRead = false;
 
@@ -51,18 +48,6 @@ class Notification
     public function setUser(?User $user): self
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    public function getModule(): ?string
-    {
-        return $this->module;
-    }
-
-    public function setModule(string $module): self
-    {
-        $this->module = $module;
 
         return $this;
     }

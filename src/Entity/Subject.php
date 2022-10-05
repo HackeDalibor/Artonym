@@ -36,12 +36,13 @@ class Subject
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Image::class, cascade: ['persist', 'remove'])]
     private Collection $images;
 
+    // TODO : créer une table Reaction
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->creationDate = new DateTime("now", new DateTimeZone('Europe/Paris'));
-        $this->likedBy = new ArrayCollection();
     }
 
     public function getId(): ?int

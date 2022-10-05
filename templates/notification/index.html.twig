@@ -4,8 +4,8 @@
 
 {% block body %}
 
-    {% for notification in notifications %}
-        {{ notification }}
+    {% for notification in app.user.notifications %}
+        {{ notification }} <br/>
     {% endfor %}
 
 {% endblock body %}
