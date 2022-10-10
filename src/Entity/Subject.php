@@ -36,6 +36,9 @@ class Subject
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Image::class, cascade: ['persist', 'remove'])]
     private Collection $images;
 
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'likedSubjects')]
+    private Collection $likedBy;
+
     // TODO : créer une table Reaction
 
     public function __construct()
@@ -43,6 +46,7 @@ class Subject
         $this->comments = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->creationDate = new DateTime("now", new DateTimeZone('Europe/Paris'));
+        $this->likedBy = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -162,5 +166,29 @@ class Subject
     public function __toString()
     {
         return $this->title;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getLikedBy(): Collection
+    {
+        return $this->likedBy;
+    }
+
+    public function addLikedBy(User $likedBy): self
+    {
+        if (!$this->likedBy->contains($likedBy)) {
+            $this->likedBy->add($likedBy);
+        }
+
+        return $this;
+    }
+
+    public function removeLikedBy(User $likedBy): self
+    {
+        $this->likedBy->removeElement($likedBy);
+
+        return $this;
     }
 }
