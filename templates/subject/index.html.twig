@@ -3,33 +3,56 @@
 {% block title %}Subject index{% endblock %}
 
 {% block body %}
-    <h1>Subject index</h1>
+    {% for subject in subjects %}
+    <h1>{{ subject }}</h1>
+    <p>{{ subject.category }}</p>
+    <h4>Created by {{ subject.user }}</h4>
+    <p>{{ subject.creationDate }}</p>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Title</th>
-                <th>CreationDate</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <ul class="slides">
+        <input type="radio" name="radio-btn" id="img-1" checked />
+        {% for image in subject.images %}
+            <li class="slide-container">
+                <div class="slide">
+                    <img src="{{ asset('uploads/images/userimage/') }}{{ image }}" alt="{{ image }}">
+                </div>
+                <div class="nav">
+                    <label for="img-6" class="prev">&#x2039;</label>
+                    <label for="img-2" class="next">&#x203a;</label>
+                </div>
+            </li>
 
-        {% for subject in subjects %}
-            <tr>
-                <td>{{ subject.title }}</td>
-                <td>{{ subject.creationDate ? subject.creationDate }}</td>
-                <td> 
-                    <a href="{{ path('app_subject_show', {'id': subject.id}) }}">show</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="4">no records found</td>
-            </tr>
+            <li class="nav-dots">
+                <label for="img-1" class="nav-dot" id="img-dot-1"></label>
+            </li>
+            
         {% endfor %}
-        </tbody>
-    </table>
+        </ul>
+        <p>{{ subject.reactions|length }} reactions, {{ subject.comments|length }} comments</p>
+        {% if subject.reactions.contains(app.user) %}
+            <p>Hello !</p>
+        {% else %}
+            <a href="{{ path('app_subject_likes', {id: subject.id}) }}">like</a>
+        {% endif %}
+
+        {# <h2>COMMENTS</h2>
+        {% for comment in subject.comments %}
+            <p>{{ comment }}</p>
+        {% endfor %} #}
+        <a href="{{ path('app_subject_show', {'id': subject.id}) }}">show</a>
+
+        {% if app.user.id == subject.user.id %}
+        
+            <a href="{{ path('app_subject_edit', {'id': subject.id}) }}">edit</a>
+
+            
+            {{ include('subject/_delete_form.html.twig') }}
+        {% endif %}
+    {% else %}
+        <tr>
+            <td colspan="4">no records found</td>
+        </tr>
+    {% endfor %}
 
     <a href="{{ path('app_subject_new') }}">Create new</a>
 {% endblock %}

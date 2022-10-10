@@ -6,10 +6,12 @@ use App\Entity\Image;
 use App\Entity\Subject;
 use App\Entity\Category;
 use App\Entity\Comment;
+use App\Entity\Reaction;
 use App\Form\CommentType;
 use App\Form\SubjectType;
 use App\Repository\CommentRepository;
 use App\Repository\ImageRepository;
+use App\Repository\ReactionRepository;
 use App\Services\FileUploader;
 use App\Repository\SubjectRepository;
 use App\Services\NotificationService;
@@ -142,29 +144,19 @@ class SubjectController extends AbstractController
         return $this->redirectToRoute('app_subject_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/likes/{id}', name: 'app_subject_likes', methods: ['GET', 'POST'])]
-    public function likesSubject(Subject $subject,  Request $request, CommentRepository $commentRepository,
-                                NotificationService $notificationService): Response
-    {        
-        $user = $this->getUser();
-        
-        $comment = new Comment();
-        $formComment = $this->createForm(CommentType::class);
-        $formComment->handleRequest($request);
-        
-        if ($formComment->isSubmitted() && $formComment->isValid())
-        {
-            $comment->setText($formComment->get('text')->getViewData());
-            $comment->setUser($user);
-            $comment->setSubject($subject);
-            $commentRepository->add($comment, true);
-            $notificationService->newNotification($comment, $subject->getUser());
-        }
-        
-        return $this->render('subject/show.html.twig',[
-            'subject' => $subject,
-            'formComment' => $formComment->createView(),
-        ]);
+    // #[Route('/likes/{id}', name: 'app_subject_likes', methods: ['GET', 'POST'])]
+    // public function likesSubject(SubjectRepository $subjectRepository,Reaction $reaction, Subject $subject, ReactionRepository $reactionRepository, NotificationService $notificationService): Response
+    // {        
+    //     $user = $this->getUser();
 
-    }
+    //     $reaction->setLikes(true);
+    //     $reaction->setUserReacts($user);
+    //     $reaction->setReactedSubject($subject);
+    //     $reactionRepository->add($reaction, true);
+        
+    //     return $this->render('subject/index.html.twig',[
+    //         'subjects' => $subjectRepository->findAll(),
+    //     ]);
+
+    // }
 }
