@@ -13,7 +13,6 @@ use App\Repository\ImageRepository;
 use App\Services\FileUploader;
 use App\Repository\SubjectRepository;
 use App\Services\NotificationService;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,8 +32,8 @@ class SubjectController extends AbstractController
     }
 
     #[Route('/new', name: 'app_subject_new', methods: ['GET', 'POST'])]
-    public function multipleImageInsert(Request $request, SluggerInterface $slugger, SubjectRepository $subjectRepository,
-                                        ImageRepository $imageRepository, NotificationService $notificationService)
+    public function new(Request $request, SluggerInterface $slugger, SubjectRepository $subjectRepository,
+                        ImageRepository $imageRepository, NotificationService $notificationService)
     {
         $subject =  new Subject();
         $form = $this->createForm(SubjectType::class);
@@ -94,14 +93,15 @@ class SubjectController extends AbstractController
     public function show(Request $request, Subject $subject, CommentRepository $commentRepository,
                         NotificationService $notificationService): Response
     {
-        $comment = new Comment();
         $user = $this->getUser();
-        $form = $this->createForm(CommentType::class);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid())
+        $comment = new Comment();
+        $formComment = $this->createForm(CommentType::class);
+        $formComment->handleRequest($request);
+
+        if ($formComment->isSubmitted() && $formComment->isValid())
         {
-            $comment->setText($form->get('text')->getViewData());
+            $comment->setText($formComment->get('text')->getViewData());
             $comment->setUser($user);
             $comment->setSubject($subject);
             $commentRepository->add($comment, true);
@@ -110,7 +110,7 @@ class SubjectController extends AbstractController
 
         return $this->render('subject/show.html.twig', [
             'subject' => $subject,
-            'form' => $form->createView(),
+            'formComment' => $formComment->createView(),
         ]);
     }
 
@@ -140,5 +140,31 @@ class SubjectController extends AbstractController
         }
 
         return $this->redirectToRoute('app_subject_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/likes/{id}', name: 'app_subject_likes', methods: ['GET', 'POST'])]
+    public function likesSubject(Subject $subject,  Request $request, CommentRepository $commentRepository,
+                                NotificationService $notificationService): Response
+    {        
+        $user = $this->getUser();
+        
+        $comment = new Comment();
+        $formComment = $this->createForm(CommentType::class);
+        $formComment->handleRequest($request);
+        
+        if ($formComment->isSubmitted() && $formComment->isValid())
+        {
+            $comment->setText($formComment->get('text')->getViewData());
+            $comment->setUser($user);
+            $comment->setSubject($subject);
+            $commentRepository->add($comment, true);
+            $notificationService->newNotification($comment, $subject->getUser());
+        }
+        
+        return $this->render('subject/show.html.twig',[
+            'subject' => $subject,
+            'formComment' => $formComment->createView(),
+        ]);
+
     }
 }

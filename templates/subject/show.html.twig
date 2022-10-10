@@ -27,17 +27,22 @@
             
         {% endfor %}
     </ul>
-    <p>{{ subject.comments|length }} comments</p>
+    <p>{{ subject.reactions|length }} reactions, {{ subject.comments|length }} comments</p>
+    {% if subject.reactions.contains(app.user) %}
+        <p>Hello !</p>
+    {% else %}
+        <a href="{{ path('app_subject_reaction', {id: subject.id}) }}">like</a>
+    {% endif %}
 
     <h2>COMMENTS</h2>
     {% for comment in subject.comments %}
         <p>{{ comment }}</p>
     {% endfor %}
 
-    {{ form_start(form) }}
-        {{ form_widget(form.text) }}
+    {{ form_start(formComment) }}
+        {{ form_widget(formComment.text) }}
         <button type="submit">Send</button>
-    {{ form_end(form) }}
+    {{ form_end(formComment) }}
 
 
     <a href="{{ path('app_subject_index') }}">back to list</a>
