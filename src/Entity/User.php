@@ -74,6 +74,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Subject::class, mappedBy: 'likedBy')]
     private Collection $likedSubjects;
 
+    #[ORM\OneToMany(mappedBy: 'sender', targetEntity: DirectMessage::class)]
+    private Collection $sentDirectMessages;
+
+    #[ORM\OneToMany(mappedBy: 'reciever', targetEntity: DirectMessage::class)]
+    private Collection $recievedDirectMessages;
+
     public function __construct()
     {
         $this->subjects = new ArrayCollection();
@@ -86,6 +92,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->following = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->likedSubjects = new ArrayCollection();
+        $this->sentDirectMessages = new ArrayCollection();
+        $this->recievedDirectMessages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -456,6 +464,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->likedSubjects->removeElement($likedSubject)) {
             $likedSubject->removeLikedBy($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DirectMessage>
+     */
+    public function getSentDirectMessages(): Collection
+    {
+        return $this->sentDirectMessages;
+    }
+
+    public function addSentDirectMessage(DirectMessage $sentDirectMessage): self
+    {
+        if (!$this->sentDirectMessages->contains($sentDirectMessage)) {
+            $this->sentDirectMessages->add($sentDirectMessage);
+            $sentDirectMessage->setSender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSentDirectMessage(DirectMessage $sentDirectMessage): self
+    {
+        if ($this->sentDirectMessages->removeElement($sentDirectMessage)) {
+            // set the owning side to null (unless already changed)
+            if ($sentDirectMessage->getSender() === $this) {
+                $sentDirectMessage->setSender(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DirectMessage>
+     */
+    public function getRecievedDirectMessages(): Collection
+    {
+        return $this->recievedDirectMessages;
+    }
+
+    public function addRecievedDirectMessage(DirectMessage $recievedDirectMessage): self
+    {
+        if (!$this->recievedDirectMessages->contains($recievedDirectMessage)) {
+            $this->recievedDirectMessages->add($recievedDirectMessage);
+            $recievedDirectMessage->setReciever($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRecievedDirectMessage(DirectMessage $recievedDirectMessage): self
+    {
+        if ($this->recievedDirectMessages->removeElement($recievedDirectMessage)) {
+            // set the owning side to null (unless already changed)
+            if ($recievedDirectMessage->getReciever() === $this) {
+                $recievedDirectMessage->setReciever(null);
+            }
         }
 
         return $this;
