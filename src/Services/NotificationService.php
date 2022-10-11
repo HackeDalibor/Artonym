@@ -27,12 +27,25 @@ class NotificationService
                 $this->notificationRepository->add($notification, true);
             }
         } elseif (get_class($object) === 'App\Entity\Comment') {
+
             $notification = new Notification();
-            $notification->setDescription("You have a new comment on your post .");
+            $notification->setDescription("You have a new comment on your post.");
             $notification->setUser($user);
             $user->addNotification($notification);
             $this->notificationRepository->add($notification, true);
-        } // TODO : liked subject and comment notifications
+
+        }
+        // TODO : When Reaction entity is done this will create the new notification 
+        // elseif (get_class($object) === 'App\Entity\Su') {
+        //     foreach($user->getLikedSubjects() as $likedSubject)
+        //     {
+        //         $notification = new Notification();
+        //         $notification->setDescription($user->getNickname()." liked your post.");
+        //         $notification->setUser($likedSubject->getUser());
+        //         $likedSubject->getUser()->addNotification($notification);
+        //         $this->notificationRepository->add($notification, true);
+        //     }
+        // }
     }
 
 }
