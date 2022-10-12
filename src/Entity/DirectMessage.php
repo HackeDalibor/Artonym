@@ -17,9 +17,6 @@ class DirectMessage
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $text = null;
-
-    #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -44,18 +41,6 @@ class DirectMessage
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getText(): ?string
-    {
-        return $this->text;
-    }
-
-    public function setText(string $text): self
-    {
-        $this->text = $text;
-
-        return $this;
     }
 
     public function getContent(): ?string
