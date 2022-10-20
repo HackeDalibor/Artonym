@@ -2,9 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\User;
 use App\Entity\Reaction;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Reaction>
@@ -37,6 +38,22 @@ class ReactionRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+    public function getLikeByUser(User $user) {
+        return $this->createQueryBuilder('r')
+            ->where('r.user_id = :id')
+            ->setParameter('id', $user->getId())
+        ;
+    }
+
+    public function removeById($id)
+    {
+        $qb = $this->createQueryBuilder('r');
+        $qb->delete('Reaction', 'r')
+           ->andWhere('r.user_id = :id')
+           ->setParameter('id', $id)
+       ;
     }
 
 //    /**

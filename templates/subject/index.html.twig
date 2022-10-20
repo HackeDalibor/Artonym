@@ -28,7 +28,7 @@
             
         {% endfor %}
         </ul>
-        <p>{{ subject.likedBy|length }} likes, {{ subject.comments|length }} comments</p>
+        <p>{{ subject.comments|length }} comments</p>
 
         <a href="{{ path('app_subject_show', {'id': subject.id}) }}">show</a>
 

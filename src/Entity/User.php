@@ -80,6 +80,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'reciever', targetEntity: DirectMessage::class)]
     private Collection $recievedDirectMessages;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Reaction::class)]
+    private Collection $reactions;
+
     public function __construct()
     {
         $this->subjects = new ArrayCollection();
@@ -94,6 +97,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->likedSubjects = new ArrayCollection();
         $this->sentDirectMessages = new ArrayCollection();
         $this->recievedDirectMessages = new ArrayCollection();
+        $this->reactions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -523,6 +527,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($recievedDirectMessage->getReciever() === $this) {
                 $recievedDirectMessage->setReciever(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Reaction>
+     */
+    public function getReactions(): Collection
+    {
+        return $this->reactions;
+    }
+
+    public function addReaction(Reaction $reaction): self
+    {
+        if (!$this->reactions->contains($reaction)) {
+            $this->reactions->add($reaction);
+            $reaction->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReaction(Reaction $reaction): self
+    {
+        if ($this->reactions->removeElement($reaction)) {
+            // set the owning side to null (unless already changed)
+            if ($reaction->getUser() === $this) {
+                $reaction->setUser(null);
             }
         }
 

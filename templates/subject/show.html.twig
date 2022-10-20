@@ -27,11 +27,14 @@
             
         {% endfor %}
     </ul>
-    <p>{{ subject.likedBy|length }} likes, {{ subject.comments|length }} comments</p>
-    {% if subject.likedBy.contains(app.user) %}
-        <a href="{{ path('app_subject_unliked', {id: subject.id}) }}">unlike</a>
+    <p>{{ subject.comments|length }} comments</p>
+
+    {% if subject.reactions.contains(app.user) %}
+        <p>§§§§§§§§§</p>
     {% else %}
-        <a href="{{ path('app_subject_liked', {id: subject.id}) }}">like</a>
+        {{ form_start(formReaction) }}
+            {{ form_widget(formReaction) }}
+        {{ form_end(formReaction) }}
     {% endif %}
 
     <h2>COMMENTS</h2>

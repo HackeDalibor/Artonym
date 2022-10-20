@@ -3,18 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\Image;
+use App\Entity\Comment;
 use App\Entity\Subject;
 use App\Entity\Category;
-use App\Entity\Comment;
 use App\Entity\Reaction;
 use App\Form\CommentType;
 use App\Form\SubjectType;
-use App\Repository\CommentRepository;
-use App\Repository\ImageRepository;
-use App\Repository\ReactionRepository;
+use App\Form\ReactionType;
 use App\Services\FileUploader;
+use App\Repository\ImageRepository;
+use App\Repository\CommentRepository;
 use App\Repository\SubjectRepository;
 use App\Services\NotificationService;
+use App\Repository\ReactionRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -93,9 +94,111 @@ class SubjectController extends AbstractController
 
     #[Route('/{id}', name: 'app_subject_show', methods: ['GET', 'POST'])]
     public function show(Request $request, Subject $subject, CommentRepository $commentRepository,
-                        NotificationService $notificationService): Response
+                        NotificationService $notificationService, ReactionRepository $reactionRepository): Response
     {
         $user = $this->getUser();
+
+        $reaction = new Reaction();
+        $formReaction = $this->createForm(ReactionType::class, $reaction);
+        $formReaction->handleRequest($request);
+        if ($formReaction->isSubmitted())
+        {
+            // when using nested forms, two or more buttons can have the same name;
+            // in those cases, compare the button objects instead of the button names
+            if($reactionRepository->getLikeByUser($user)) {
+                if ($formReaction->getClickedButton() === $formReaction->get('likes')) {
+                    dump($reactionRepository->getLikeByUser($user));
+                    die;
+                //     $reaction->setLikes(true);
+                //     $reaction->setSubject($subject);
+                //     $reaction->setUser($user);
+                //     $reactionRepository->add($reaction, true);
+                // } elseif(count($reactionRepository->findBy(['user' => $user])) === 1 && $reactionRepository->findBy(['likes' => false])) {
+                //     $reactionRepository->removeById($user);
+                //     $reaction = new Reaction();
+                //     $reaction->setLikes(true);
+                //     $reaction->setSubject($subject);
+                //     $reaction->setUser($user);
+                //     $reactionRepository->add($reaction, true);
+                // } else {
+                //     $this->addFlash(
+                //        'error',
+                //        'You already liked this post'
+                //     );
+                }else if ($formReaction->getClickedButton() === $formReaction->get('loves')) {
+                    echo "Bonjour";
+                    die;
+                    if(count($reactionRepository->findBy(['user' => $user])) === 0) {
+
+                        $reaction->setLoves(true);
+                        $reaction->setSubject($subject);
+                        $reaction->setUser($user);
+                        $reactionRepository->add($reaction, true);
+                    } elseif(count($reactionRepository->findBy(['user' => $user])) === 1 && $reactionRepository->findBy(['loves' => false])) {
+                        $reaction->setLikes(false);
+                        $reaction->setLoves(true);
+                        $reaction->setDontLike(false);
+                        $reaction->setWow(false);
+                        $reaction->setFunny(false);
+                        $reaction->setSad(false);
+                        $reaction->setSubject($subject);
+                        $reaction->setUser($user);
+                        $reactionRepository->add($reaction, true);
+                    } else {
+                        $this->addFlash(
+                           'error',
+                           'You already loved this post'
+                        );
+                    }
+                } else if ($formReaction->getClickedButton() === $formReaction->get('dontLike')) {
+                    if(count($reactionRepository->findBy(['user' => $user])) === 0) {
+                        $reaction->setLikes(false);
+                        $reaction->setLoves(false);
+                        $reaction->setDontLike(true);
+                        $reaction->setWow(false);
+                        $reaction->setFunny(false);
+                        $reaction->setSad(false);
+                        $reaction->setSubject($subject);
+                        $reaction->setUser($user);}
+                    $reactionRepository->add($reaction, true);
+                } else if ($formReaction->getClickedButton() === $formReaction->get('wow')) {
+                    if(count($reactionRepository->findBy(['user' => $user])) === 0) {
+                        $reaction->setLikes(false);
+                        $reaction->setLoves(false);
+                        $reaction->setDontLike(false);
+                        $reaction->setWow(true);
+                        $reaction->setFunny(false);
+                        $reaction->setSad(false);
+                        $reaction->setSubject($subject);
+                        $reaction->setUser($user);
+                        $reactionRepository->add($reaction, true);}
+                } else if ($formReaction->getClickedButton() === $formReaction->get('funny')) {
+                    if(count($reactionRepository->findBy(['user' => $user])) === 0) {
+                        $reaction->setLikes(false);
+                        $reaction->setLoves(false);
+                        $reaction->setDontLike(false);
+                        $reaction->setWow(false);
+                        $reaction->setFunny(true);
+                        $reaction->setSad(false);
+                        $reaction->setSubject($subject);
+                        $reaction->setUser($user);
+                        $reactionRepository->add($reaction, true);}
+                } else if ($formReaction->getClickedButton() === $formReaction->get('sad')) {
+                    if(count($reactionRepository->findBy(['user' => $user])) === 0) {
+                        $reaction->setLikes(false);
+                        $reaction->setLoves(false);
+                        $reaction->setDontLike(false);
+                        $reaction->setWow(false);
+                        $reaction->setFunny(false);
+                        $reaction->setSad(true);
+                        $reaction->setSubject($subject);
+                        $reaction->setUser($user);
+                        $reactionRepository->add($reaction, true);}
+                }
+            }
+            
+            
+            } 
 
         $comment = new Comment();
         $formComment = $this->createForm(CommentType::class);
@@ -113,6 +216,7 @@ class SubjectController extends AbstractController
         return $this->render('subject/show.html.twig', [
             'subject' => $subject,
             'formComment' => $formComment->createView(),
+            'formReaction' => $formReaction->createView(),
         ]);
     }
 
