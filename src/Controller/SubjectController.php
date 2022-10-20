@@ -5,12 +5,10 @@ namespace App\Controller;
 use App\Entity\Image;
 use App\Entity\Comment;
 use App\Entity\Subject;
-use App\Entity\Category;
 use App\Entity\Reaction;
 use App\Form\CommentType;
 use App\Form\SubjectType;
 use App\Form\ReactionType;
-use App\Services\FileUploader;
 use App\Repository\ImageRepository;
 use App\Repository\CommentRepository;
 use App\Repository\SubjectRepository;
@@ -105,97 +103,37 @@ class SubjectController extends AbstractController
         {
             // when using nested forms, two or more buttons can have the same name;
             // in those cases, compare the button objects instead of the button names
-            if($reactionRepository->getLikeByUser($user)) {
-                if ($formReaction->getClickedButton() === $formReaction->get('likes')) {
-                    dump($reactionRepository->getLikeByUser($user));
-                    die;
-                //     $reaction->setLikes(true);
-                //     $reaction->setSubject($subject);
-                //     $reaction->setUser($user);
-                //     $reactionRepository->add($reaction, true);
-                // } elseif(count($reactionRepository->findBy(['user' => $user])) === 1 && $reactionRepository->findBy(['likes' => false])) {
-                //     $reactionRepository->removeById($user);
-                //     $reaction = new Reaction();
-                //     $reaction->setLikes(true);
-                //     $reaction->setSubject($subject);
-                //     $reaction->setUser($user);
-                //     $reactionRepository->add($reaction, true);
-                // } else {
-                //     $this->addFlash(
-                //        'error',
-                //        'You already liked this post'
-                //     );
-                }else if ($formReaction->getClickedButton() === $formReaction->get('loves')) {
-                    echo "Bonjour";
-                    die;
-                    if(count($reactionRepository->findBy(['user' => $user])) === 0) {
-
+                $reaction->setSubject($subject);
+                $reaction->setUser($user);
+                if($formReaction->getClickedButton() === $formReaction->get('likes')) {
+                    $reaction->setLikes(true);
+                } else if ($formReaction->getClickedButton() === $formReaction->get('loves')) {
+                    if(!$reactionRepository->getLikeByUser($user)) {
                         $reaction->setLoves(true);
-                        $reaction->setSubject($subject);
-                        $reaction->setUser($user);
-                        $reactionRepository->add($reaction, true);
-                    } elseif(count($reactionRepository->findBy(['user' => $user])) === 1 && $reactionRepository->findBy(['loves' => false])) {
-                        $reaction->setLikes(false);
+                    } elseif($reactionRepository->getLikeByUser($user) && $reactionRepository->findBy(['loves' => false])) {
                         $reaction->setLoves(true);
-                        $reaction->setDontLike(false);
-                        $reaction->setWow(false);
-                        $reaction->setFunny(false);
-                        $reaction->setSad(false);
-                        $reaction->setSubject($subject);
-                        $reaction->setUser($user);
-                        $reactionRepository->add($reaction, true);
                     } else {
-                        $this->addFlash(
-                           'error',
-                           'You already loved this post'
-                        );
+                        $reaction->setLoves(false);
                     }
                 } else if ($formReaction->getClickedButton() === $formReaction->get('dontLike')) {
                     if(count($reactionRepository->findBy(['user' => $user])) === 0) {
-                        $reaction->setLikes(false);
-                        $reaction->setLoves(false);
                         $reaction->setDontLike(true);
-                        $reaction->setWow(false);
-                        $reaction->setFunny(false);
-                        $reaction->setSad(false);
-                        $reaction->setSubject($subject);
-                        $reaction->setUser($user);}
-                    $reactionRepository->add($reaction, true);
+                    }
                 } else if ($formReaction->getClickedButton() === $formReaction->get('wow')) {
                     if(count($reactionRepository->findBy(['user' => $user])) === 0) {
-                        $reaction->setLikes(false);
-                        $reaction->setLoves(false);
-                        $reaction->setDontLike(false);
                         $reaction->setWow(true);
-                        $reaction->setFunny(false);
-                        $reaction->setSad(false);
-                        $reaction->setSubject($subject);
-                        $reaction->setUser($user);
-                        $reactionRepository->add($reaction, true);}
+                    }
                 } else if ($formReaction->getClickedButton() === $formReaction->get('funny')) {
                     if(count($reactionRepository->findBy(['user' => $user])) === 0) {
-                        $reaction->setLikes(false);
-                        $reaction->setLoves(false);
-                        $reaction->setDontLike(false);
-                        $reaction->setWow(false);
                         $reaction->setFunny(true);
-                        $reaction->setSad(false);
-                        $reaction->setSubject($subject);
-                        $reaction->setUser($user);
-                        $reactionRepository->add($reaction, true);}
+                    }
                 } else if ($formReaction->getClickedButton() === $formReaction->get('sad')) {
                     if(count($reactionRepository->findBy(['user' => $user])) === 0) {
-                        $reaction->setLikes(false);
-                        $reaction->setLoves(false);
-                        $reaction->setDontLike(false);
-                        $reaction->setWow(false);
-                        $reaction->setFunny(false);
                         $reaction->setSad(true);
-                        $reaction->setSubject($subject);
-                        $reaction->setUser($user);
-                        $reactionRepository->add($reaction, true);}
+                    }
                 }
-            }
+                $reactionRepository->add($reaction, true);
+            
             
             
             } 
