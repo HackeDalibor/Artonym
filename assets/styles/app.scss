@@ -5,16 +5,16 @@
 }
 
 body {
-    background-color: rgb(209, 244, 255);
+    background-color: rgb(231, 231, 231);
 }
 
 // *** Header ***
 header {
-    height: 100px;
+    height: 60px;
     width: 100%;
     position: absolute;
     margin-top: 30px;
-    background: linear-gradient(95.08deg, #AEECFF -7.05%, #FFBF9B 103.09%);;
+    background: #003b4d;
 }
 
 nav {
@@ -33,8 +33,9 @@ li {
     display: block;
 }
 
-a {
-    color: rgb(55, 79, 109);
+header a {
+    font-size: 16px;
+    color: white;
 }
 
 .nbNotifications {
@@ -49,15 +50,15 @@ a {
 }
 
 img {
-    height: 150px;
-    width: 150px;
+    height: 120px;
+    width: 120px;
 }
 
 i {
-    height: 30px;
-    width: 30px;
-    font-size: 30px;
-    color: rgb(55, 79, 109);
+    height: 20px;
+    width: 20px;
+    font-size: 20px;
+    color: white;
 }
 // *** End of Header ***
 
@@ -69,6 +70,33 @@ main {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+section {
+    width: 25em;
+    padding: 30px;
+    background: white;
+    border-radius: 50px;
+}
+
+section.reset {
+    width: 35em;
+}
+
+section.section {
+    width: 80%;
+}
+
+section.profile-section {
+    width: 50%;
+    position: relative;
+    left: 15em;
+    bottom: 10em;
+}
+
+div.profile-card {
+    position: relative;
+    right: 30em;
 }
 
 h1 {

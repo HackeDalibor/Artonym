@@ -31,15 +31,17 @@
                         <li><a href="{{ path('app_direct_message_index') }}"><i class="fa-regular fa-message"></i></a></li>
                         <li>
                             <a href="{{ path('app_notification_list') }}">
-                                <div class="nbNotifications">
-                                    {% set nb = 0 %}
-                                    {% for notification in app.user.notifications %}
-                                        {% if notification.isRead == 0 %}
-                                            {% set nb = nb + 1 %}
-                                        {% endif %}
-                                    {% endfor %}
-                                    {{ nb }}
-                                 </div>
+                                {% set nb = 0 %}
+                                {% if nb >= 1 %}
+                                    <div class="nbNotifications">
+                                        {% for notification in app.user.notifications %}
+                                            {% if notification.isRead == 0 %}
+                                                {% set nb = nb + 1 %}
+                                            {% endif %}
+                                        {% endfor %}
+                                        {{ nb }}
+                                    </div>
+                                {% endif %}
                                 <i class="fa-regular fa-bell"></i>
                             </a>
                         </li>

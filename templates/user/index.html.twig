@@ -3,38 +3,19 @@
 {% block title %}User index{% endblock %}
 
 {% block body %}
-    <h1>User index</h1>
+    <h1>Users</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Email</th>
-                <th>Roles</th>
-                <th>Nickname</th>
-                <th>InscriptionDate</th>
-                <th>Status</th>
-                <th>IsVerified</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td>{{ user.email }}</td>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                <td>{{ user.nickname }}</td>
-                <td>{{ user.inscriptionDate }}</td>
-                <td>{{ user.status ? 'Blocked' : 'Not Blocked' }}</td>
-                <td>{{ user.isVerified ? 'Verified' : 'Not Verified' }}</td>
-                <td>
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
+    {% for user in users %}
+            <p>
+                {{ user.nickname }}
+                <a href="{{ path('app_user_show', {'id': user.id}) }}">show</a>
+                
+                {% if is_granted('ROLE_ADMIN') %}
                     <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
-                </td>
-            </tr>
+                {% endif %}
+            </p>
         {% else %}
-            <tr>
-                <td colspan="9">no records found</td>
-            </tr>
+            <p colspan="9">no records found</p>
         {% endfor %}
         </tbody>
     </table>

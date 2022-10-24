@@ -1,22 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Category{% endblock %}
+{% block title %}{{ category.categoryType }}{% endblock %}
 
 {% block body %}
-    <h1>Category</h1>
+    <h1>{{ category.categoryType }}</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ category.id }}</td>
-            </tr>
-            <tr>
-                <th>CategoryType</th>
-                <td>{{ category.categoryType }}</td>
-            </tr>
-        </tbody>
-    </table>
+    {% for subject in category.subjects %}
+        <p>{{ subject }}</p>
+    {% else %}
+        <p>no records found</p>
+    {% endfor %}
 
     <a href="{{ path('app_category_index') }}">back to list</a>
 

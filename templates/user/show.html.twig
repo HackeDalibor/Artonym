@@ -3,47 +3,54 @@
 {% block title %}User{% endblock %}
 
 {% block body %}
-    <h1>{{ user.nickname }}</h1>
+    <div class="card profile-card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{ user.nickname }}</h5>
+            <p class="card-text">joined us in {{ user.inscriptionDate }}.</p>
+            
+            {% if user.followers.contains(app.user) %}
+                <a href="{{ path('app_user_unfollow', {id: user.id}) }}" class="btn btn-primary follow-user">Unfollow</a>
+            {% else %}
+                <a href="{{ path('app_user_follow', {id: user.id}) }}" class="btn btn-primary follow-user">Follow</a>
+            {% endif %}
+        </div>
+    </div>
 
-    {% if user.followers.contains(app.user) %}
-        <a class="follow-user" href="{{ path('app_user_unfollow', {id: user.id}) }}">Unfollow</a>
-    {% else %}
-        <a class="follow-user" href="{{ path('app_user_follow', {id: user.id}) }}">Follow</a>
-    {% endif %}
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Email</th>
-                <td>{{ user.email }}</td>
-            </tr>
-            <tr>
-                <th>Roles</th>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>InscriptionDate</th>
-                <td>{{ user.inscriptionDate }}</td>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <td>{{ user.status ? 'Yes' : 'No' }}</td>
-            </tr>
-            <tr>
-                <th>IsVerified</th>
-                <td>{{ user.isVerified ? 'Yes' : 'No' }}</td>
-            </tr>
-        </tbody>
-    </table>
 
     {% for subject in user.subjects %}
-        <section class="section">
+        <section class="profile-section">
 
-            <p>{{ subject }}</p>
+            <h3>{{ subject }}</h3>
+            <p>{{ subject.category }}</p>
+            <p>{{ subject.creationDate }}</p>
+
+            <ul class="slides">
+                <input type="radio" name="radio-btn" id="img-1" checked />
+                {% for image in subject.images %}
+                    <li class="slide-container">
+                        <div class="slide">
+                            <img src="{{ asset('uploads/images/userimage/') }}{{ image }}" alt="{{ image }}">
+                        </div>
+                        <div class="nav">
+                            <label for="img-6" class="prev">&#x2039;</label>
+                            <label for="img-2" class="next">&#x203a;</label>
+                        </div>
+                    </li>
+
+                    <li class="nav-dots">
+                        <label for="img-1" class="nav-dot" id="img-dot-1"></label>
+                    </li>
+                {% endfor %}
+            </ul>
+            <p>{{ subject.comments|length }} comments</p>
+
+            <a href="{{ path('app_subject_show', {'id': subject.id}) }}">show</a>
+
         </section>
+    {% else %}
+        <p>This user didn't create any subjects</p>
     {% endfor %}
-
-    <a href="{{ path('app_user_index') }}">back to list</a>
 
     <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
 

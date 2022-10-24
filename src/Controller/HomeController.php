@@ -23,6 +23,7 @@ class HomeController extends AbstractController
                     'subjects' => $subjectRepository->findBy(['user' => $following], ['creationDate' => 'DESC'], 15),
                 ]);
             }
+            return $this->render('home/nofollowing.html.twig');
         }
     }
 
