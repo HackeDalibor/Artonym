@@ -106,7 +106,13 @@ class SubjectController extends AbstractController
                 $reaction->setSubject($subject);
                 $reaction->setUser($user);
                 if($formReaction->getClickedButton() === $formReaction->get('likes')) {
-                    $reaction->setLikes(true);
+                    if(!$reactionRepository->getLikeByUser($user)) {
+                        $reaction->setLikes(true);
+                    } elseif($reactionRepository->getLikeByUser($user) && $reactionRepository->findBy(['likes' => false])) {
+                        $reaction->setLikes(true);
+                    } else {
+                        $reaction->setLikes(false);
+                    }
                 } else if ($formReaction->getClickedButton() === $formReaction->get('loves')) {
                     if(!$reactionRepository->getLikeByUser($user)) {
                         $reaction->setLoves(true);
@@ -116,20 +122,36 @@ class SubjectController extends AbstractController
                         $reaction->setLoves(false);
                     }
                 } else if ($formReaction->getClickedButton() === $formReaction->get('dontLike')) {
-                    if(count($reactionRepository->findBy(['user' => $user])) === 0) {
+                    if(!$reactionRepository->getLikeByUser($user)) {
                         $reaction->setDontLike(true);
+                    } elseif($reactionRepository->getLikeByUser($user) && $reactionRepository->findBy(['dontLike' => false])) {
+                        $reaction->setDontLike(true);
+                    } else {
+                        $reaction->setDontLike(false);
                     }
                 } else if ($formReaction->getClickedButton() === $formReaction->get('wow')) {
-                    if(count($reactionRepository->findBy(['user' => $user])) === 0) {
+                    if(!$reactionRepository->getLikeByUser($user)) {
                         $reaction->setWow(true);
+                    } elseif($reactionRepository->getLikeByUser($user) && $reactionRepository->findBy(['wow' => false])) {
+                        $reaction->setWow(true);
+                    } else {
+                        $reaction->setWow(false);
                     }
                 } else if ($formReaction->getClickedButton() === $formReaction->get('funny')) {
-                    if(count($reactionRepository->findBy(['user' => $user])) === 0) {
+                    if(!$reactionRepository->getLikeByUser($user)) {
                         $reaction->setFunny(true);
+                    } elseif($reactionRepository->getLikeByUser($user) && $reactionRepository->findBy(['funny' => false])) {
+                        $reaction->setFunny(true);
+                    } else {
+                        $reaction->setFunny(false);
                     }
                 } else if ($formReaction->getClickedButton() === $formReaction->get('sad')) {
-                    if(count($reactionRepository->findBy(['user' => $user])) === 0) {
+                    if(!$reactionRepository->getLikeByUser($user)) {
                         $reaction->setSad(true);
+                    } elseif($reactionRepository->getLikeByUser($user) && $reactionRepository->findBy(['sad' => false])) {
+                        $reaction->setSad(true);
+                    } else {
+                        $reaction->setSad(false);
                     }
                 }
                 $reactionRepository->add($reaction, true);
