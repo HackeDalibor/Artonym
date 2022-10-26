@@ -36,9 +36,6 @@ class Subject
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Image::class, cascade: ['persist', 'remove'])]
     private Collection $images;
 
-    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'likedSubjects')]
-    private Collection $likedBy;
-
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Reaction::class)]
     private Collection $reactions;
 
@@ -47,7 +44,6 @@ class Subject
         $this->comments = new ArrayCollection();
         $this->images = new ArrayCollection();
         $this->creationDate = new DateTime("now", new DateTimeZone('Europe/Paris'));
-        $this->likedBy = new ArrayCollection();
         $this->reactions = new ArrayCollection();
     }
 
@@ -165,35 +161,6 @@ class Subject
         return $this;
     }
 
-    public function __toString()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @return Collection<int, User>
-     */
-    public function getLikedBy(): Collection
-    {
-        return $this->likedBy;
-    }
-
-    public function addLikedBy(User $likedBy): self
-    {
-        if (!$this->likedBy->contains($likedBy)) {
-            $this->likedBy->add($likedBy);
-        }
-
-        return $this;
-    }
-
-    public function removeLikedBy(User $likedBy): self
-    {
-        $this->likedBy->removeElement($likedBy);
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Reaction>
      */
@@ -201,17 +168,17 @@ class Subject
     {
         return $this->reactions;
     }
-
+    
     public function addReaction(Reaction $reaction): self
     {
         if (!$this->reactions->contains($reaction)) {
             $this->reactions->add($reaction);
             $reaction->setSubject($this);
         }
-
+        
         return $this;
     }
-
+    
     public function removeReaction(Reaction $reaction): self
     {
         if ($this->reactions->removeElement($reaction)) {
@@ -220,7 +187,22 @@ class Subject
                 $reaction->setSubject(null);
             }
         }
-
+        
         return $this;
+    }
+
+    public function isReactedByUser(User $user): bool
+    {
+        foreach($this->reactions as $reaction)
+        {
+            if($reaction->getUser() === $user) return true;
+        }
+
+        return false;
+    }
+    
+    public function __toString()
+    {
+        return $this->title;
     }
 }

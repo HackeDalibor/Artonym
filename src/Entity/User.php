@@ -71,9 +71,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Notification::class, orphanRemoval: true)]
     private Collection $notifications;
 
-    #[ORM\ManyToMany(targetEntity: Subject::class, mappedBy: 'likedBy')]
-    private Collection $likedSubjects;
-
     #[ORM\OneToMany(mappedBy: 'sender', targetEntity: DirectMessage::class)]
     private Collection $sentDirectMessages;
 
@@ -94,7 +91,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->followers = new ArrayCollection();
         $this->following = new ArrayCollection();
         $this->notifications = new ArrayCollection();
-        $this->likedSubjects = new ArrayCollection();
         $this->sentDirectMessages = new ArrayCollection();
         $this->recievedDirectMessages = new ArrayCollection();
         $this->reactions = new ArrayCollection();
@@ -441,33 +437,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($notification->getUser() === $this) {
                 $notification->setUser(null);
             }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Subject>
-     */
-    public function getLikedSubjects(): Collection
-    {
-        return $this->likedSubjects;
-    }
-
-    public function addLikedSubject(Subject $likedSubject): self
-    {
-        if (!$this->likedSubjects->contains($likedSubject)) {
-            $this->likedSubjects->add($likedSubject);
-            $likedSubject->addLikedBy($this);
-        }
-
-        return $this;
-    }
-
-    public function removeLikedSubject(Subject $likedSubject): self
-    {
-        if ($this->likedSubjects->removeElement($likedSubject)) {
-            $likedSubject->removeLikedBy($this);
         }
 
         return $this;

@@ -8,7 +8,6 @@ use App\Entity\Subject;
 use App\Entity\Reaction;
 use App\Form\CommentType;
 use App\Form\SubjectType;
-use App\Form\ReactionType;
 use App\Repository\ImageRepository;
 use App\Repository\CommentRepository;
 use App\Repository\SubjectRepository;
@@ -96,70 +95,6 @@ class SubjectController extends AbstractController
     {
         $user = $this->getUser();
 
-        $reaction = new Reaction();
-        $formReaction = $this->createForm(ReactionType::class, $reaction);
-        $formReaction->handleRequest($request);
-        if ($formReaction->isSubmitted())
-        {
-            // when using nested forms, two or more buttons can have the same name;
-            // in those cases, compare the button objects instead of the button names
-                $reaction->setSubject($subject);
-                $reaction->setUser($user);
-                if($formReaction->getClickedButton() === $formReaction->get('likes')) {
-                    if(!$reactionRepository->getLikeByUser($user)) {
-                        $reaction->setLikes(true);
-                    } elseif($reactionRepository->getLikeByUser($user) && $reactionRepository->findBy(['likes' => false])) {
-                        $reaction->setLikes(true);
-                    } else {
-                        $reaction->setLikes(false);
-                    }
-                } else if ($formReaction->getClickedButton() === $formReaction->get('loves')) {
-                    if(!$reactionRepository->getLikeByUser($user)) {
-                        $reaction->setLoves(true);
-                    } elseif($reactionRepository->getLikeByUser($user) && $reactionRepository->findBy(['loves' => false])) {
-                        $reaction->setLoves(true);
-                    } else {
-                        $reaction->setLoves(false);
-                    }
-                } else if ($formReaction->getClickedButton() === $formReaction->get('dontLike')) {
-                    if(!$reactionRepository->getLikeByUser($user)) {
-                        $reaction->setDontLike(true);
-                    } elseif($reactionRepository->getLikeByUser($user) && $reactionRepository->findBy(['dontLike' => false])) {
-                        $reaction->setDontLike(true);
-                    } else {
-                        $reaction->setDontLike(false);
-                    }
-                } else if ($formReaction->getClickedButton() === $formReaction->get('wow')) {
-                    if(!$reactionRepository->getLikeByUser($user)) {
-                        $reaction->setWow(true);
-                    } elseif($reactionRepository->getLikeByUser($user) && $reactionRepository->findBy(['wow' => false])) {
-                        $reaction->setWow(true);
-                    } else {
-                        $reaction->setWow(false);
-                    }
-                } else if ($formReaction->getClickedButton() === $formReaction->get('funny')) {
-                    if(!$reactionRepository->getLikeByUser($user)) {
-                        $reaction->setFunny(true);
-                    } elseif($reactionRepository->getLikeByUser($user) && $reactionRepository->findBy(['funny' => false])) {
-                        $reaction->setFunny(true);
-                    } else {
-                        $reaction->setFunny(false);
-                    }
-                } else if ($formReaction->getClickedButton() === $formReaction->get('sad')) {
-                    if(!$reactionRepository->getLikeByUser($user)) {
-                        $reaction->setSad(true);
-                    } elseif($reactionRepository->getLikeByUser($user) && $reactionRepository->findBy(['sad' => false])) {
-                        $reaction->setSad(true);
-                    } else {
-                        $reaction->setSad(false);
-                    }
-                }
-                $reactionRepository->add($reaction, true);
-            
-            
-            
-            } 
-
         $comment = new Comment();
         $formComment = $this->createForm(CommentType::class);
         $formComment->handleRequest($request);
@@ -176,7 +111,6 @@ class SubjectController extends AbstractController
         return $this->render('subject/show.html.twig', [
             'subject' => $subject,
             'formComment' => $formComment->createView(),
-            'formReaction' => $formReaction->createView(),
         ]);
     }
 
@@ -208,62 +142,39 @@ class SubjectController extends AbstractController
         return $this->redirectToRoute('app_subject_index', [], Response::HTTP_SEE_OTHER);
     }
 
-    #[Route('/liked/{id}', name: 'app_subject_liked', methods: ['GET', 'POST'])]
-    public function likesSubject(SubjectRepository $subjectRepository, Subject $subject, CommentRepository $commentRepository,
-                                Request $request, NotificationService $notificationService): Response
+    #[Route('/reacted/{id}', name: 'app_subject_reacted', methods: ['GET', 'POST'])]
+    public function reacts(Subject $subject, SubjectRepository $subjectRepository, ReactionRepository $reactionRepository, NotificationService $notificationService): Response
     {        
         $user = $this->getUser();
 
-        $subject->addLikedBy($user);
+        if(!$user) return $this->json(['code' => 403, 'message' => "Unauthorised"], 403);
 
-        $comment = new Comment();
-        $formComment = $this->createForm(CommentType::class);
-        $formComment->handleRequest($request);
-
-        if ($formComment->isSubmitted() && $formComment->isValid())
+        if($subject->isReactedByUser($user))
         {
-            $comment->setText($formComment->get('text')->getViewData());
-            $comment->setUser($user);
-            $comment->setSubject($subject);
-            $commentRepository->add($comment, true);
-            $notificationService->newNotification($comment, $subject->getUser());
+            $like = $reactionRepository->findOneBy([
+                'subject' => $subject,
+                'user' => $user
+            ]);
+
+            $reactionRepository->remove($like, true);
+            return $this->json([
+                'code' => 200,
+                'message' => "You have unliked this subject",
+                'reactions' => $reactionRepository->count(['subject' => $subject])
+            ], 200);
         }
 
-        $subjectRepository->add($subject, true);
-        
-        return $this->render('subject/show.html.twig', [
-            'subject' => $subject,
-            'formComment' => $formComment->createView(),
-        ]);
-    }
+        $reaction = new Reaction();
+        $reaction->setSubject($subject)
+                ->setUser($user)
+                ->setLikes(true);
 
-    #[Route('/unliked/{id}', name: 'app_subject_unliked', methods: ['GET', 'POST'])]
-    public function unlikeSubject(SubjectRepository $subjectRepository, Subject $subject, CommentRepository $commentRepository,
-                                  Request $request, NotificationService $notificationService): Response
-    {        
-        $user = $this->getUser();
+        $reactionRepository->add($reaction, true);
 
-        $subject->removeLikedBy($user);
-
-        $comment = new Comment();
-        $formComment = $this->createForm(CommentType::class);
-        $formComment->handleRequest($request);
-
-        if ($formComment->isSubmitted() && $formComment->isValid())
-        {
-            $comment->setText($formComment->get('text')->getViewData());
-            $comment->setUser($user);
-            $comment->setSubject($subject);
-            $commentRepository->add($comment, true);
-            $notificationService->newNotification($comment, $subject->getUser());
-        }
-
-        $subjectRepository->add($subject, true);
-        
-        return $this->render('subject/show.html.twig', [
-            'subject' => $subject,
-            'formComment' => $formComment->createView(),
-        ]);
-
+        return $this->json([
+            'code' => 200,
+            'message' => "You liked this subject",
+            'reactions' => $reactionRepository->count(['subject' => $subject])
+        ], 200);
     }
 }
