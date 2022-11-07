@@ -8,6 +8,7 @@ use App\Entity\Subject;
 use App\Entity\Reaction;
 use App\Form\CommentType;
 use App\Form\SubjectType;
+use App\Repository\CategoryRepository;
 use App\Repository\ImageRepository;
 use App\Repository\CommentRepository;
 use App\Repository\SubjectRepository;
@@ -33,7 +34,7 @@ class SubjectController extends AbstractController
 
     #[Route('/new', name: 'app_subject_new', methods: ['GET', 'POST'])]
     public function new(Request $request, SluggerInterface $slugger, SubjectRepository $subjectRepository,
-                        ImageRepository $imageRepository, NotificationService $notificationService)
+                        ImageRepository $imageRepository, NotificationService $notificationService, CategoryRepository $categoryRepository)
     {
         $subject =  new Subject();
         $form = $this->createForm(SubjectType::class);
@@ -41,7 +42,7 @@ class SubjectController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $subject->setTitle($form->get('title')->getViewData());
-            // $subject->setCategory($form->get('category')->getViewData());
+            $subject->setCategory($categoryRepository->findOneBy(['id' => $form->get('category')->getViewData()]));
 
             $user = $this->getUser();
             $subject->setUser($user);
@@ -79,7 +80,7 @@ class SubjectController extends AbstractController
                 
                 //TODO : Ici envoi d'email à user
 
-                return $this->redirectToRoute('app_subject_index', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('app_home_index', [], Response::HTTP_SEE_OTHER);
                     
                 }
             }

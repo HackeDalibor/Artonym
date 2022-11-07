@@ -27,18 +27,18 @@
                         <li><a href="{{ path('app_category_index') }}"><i class="fa-solid fa-hashtag"></i></a></li>
                         <li><a href="{{ path('app_user_index') }}">Users</a></li>
                         <li><a href="{{ path('app_user_profile') }}"><i class="fa-regular fa-user"></i></a></li>
-                        <li><a href="{{ path('app_message_index') }}"><i class="fa-regular fa-envelope"></i></a></li>
+                        <li><a href="{{ path('app_message_index') }}" title="messages"><i class="fa-regular fa-envelope"></i></a></li>
                         <li><a href="{{ path('app_direct_message_index') }}"><i class="fa-regular fa-message"></i></a></li>
                         <li>
                             <a href="{{ path('app_notification_list') }}">
                                 {% set nb = 0 %}
-                                {% if nb >= 1 %}
+                                {% for notification in app.user.notifications %}
+                                    {% if notification.isRead == 0 %}
+                                        {% set nb = nb + 1 %}
+                                    {% endif %}
+                                {% endfor %}
+                                {% if nb >= 1 %}    
                                     <div class="nbNotifications">
-                                        {% for notification in app.user.notifications %}
-                                            {% if notification.isRead == 0 %}
-                                                {% set nb = nb + 1 %}
-                                            {% endif %}
-                                        {% endfor %}
                                         {{ nb }}
                                     </div>
                                 {% endif %}

@@ -5,13 +5,13 @@ namespace App\Form;
 use App\Entity\User;
 use App\Entity\Message;
 use Symfony\Component\Form\AbstractType;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class MessageType extends AbstractType
 {
@@ -23,7 +23,7 @@ class MessageType extends AbstractType
                 "empty_data" => $options['user']
             ])
             ->add('title', TextType::class)
-            ->add('content', TextareaType::class)
+            ->add('content', CKEditorType::class)
             ->add('reciever', EntityType::class, [
                 "class" => User::class,
                 "choice_label" => "nickname"

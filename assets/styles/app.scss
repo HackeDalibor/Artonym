@@ -94,6 +94,16 @@ section.profile-section {
     bottom: 10em;
 }
 
+section.notif {
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.notif i {
+    color: red;
+}
+
 div.profile-card {
     position: relative;
     right: 30em;

@@ -51,13 +51,13 @@ class NotificationController extends AbstractController
         
     }
 
-    #[Route('/{id}', name: 'app_notification_delete', methods: ['POST'])]
+    #[Route('/{id}', name: 'app_notification_delete', methods: ['POST', 'GET'])]
     public function delete(Request $request, Notification $notification, NotificationRepository $notificationRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$notification->getId(), $request->request->get('_token'))) {
             $notificationRepository->remove($notification, true);
         }
 
-        return $this->redirectToRoute('app_subject_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_notification_list', [], Response::HTTP_SEE_OTHER);
     }
 }
