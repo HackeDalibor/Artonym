@@ -5,41 +5,43 @@
 {% block body %}
 
     {% for subject in subjects %}
-    <h1>{{ subject }}</h1>
-    <p>{{ subject.category }}</p>
-    <h4>Created by {{ subject.user }}</h4>
-    <p>{{ subject.creationDate }}</p>
+        <section>
+            <h1>{{ subject }}</h1>
+            <p>{{ subject.category }}</p>
+            <h4>Created by {{ subject.user }}</h4>
+            <p>{{ subject.creationDate }}</p>
 
-    <ul class="slides">
-        <input type="radio" name="radio-btn" id="img-1" checked />
-        {% for image in subject.images %}
-            <li class="slide-container">
-                <div class="slide">
-                    <img src="{{ asset('uploads/images/userimage/') }}{{ image }}" alt="{{ image }}">
-                </div>
-                <div class="nav">
-                    <label for="img-6" class="prev">&#x2039;</label>
-                    <label for="img-2" class="next">&#x203a;</label>
-                </div>
-            </li>
+            <ul class="slides">
+                <input type="radio" name="radio-btn" id="img-1" checked />
+                {% for image in subject.images %}
+                    <li class="slide-container">
+                        <div class="slide">
+                            <img src="{{ asset('uploads/images/userimage/') }}{{ image }}" alt="{{ image }}">
+                        </div>
+                        <div class="nav">
+                            <label for="img-6" class="prev">&#x2039;</label>
+                            <label for="img-2" class="next">&#x203a;</label>
+                        </div>
+                    </li>
 
-            <li class="nav-dots">
-                <label for="img-1" class="nav-dot" id="img-dot-1"></label>
-            </li>
+                    <li class="nav-dots">
+                        <label for="img-1" class="nav-dot" id="img-dot-1"></label>
+                    </li>
+                    
+                {% endfor %}
+            </ul>
+            <p>{{ subject.comments|length }} comments</p>
+
+            <a href="{{ path('app_subject_show', {'id': subject.id}) }}">show</a>
+
+            {% if app.user.id == subject.user.id %}
             
-        {% endfor %}
-        </ul>
-        <p>{{ subject.comments|length }} comments</p>
+                <a href="{{ path('app_subject_edit', {'id': subject.id}) }}">edit</a>
 
-        <a href="{{ path('app_subject_show', {'id': subject.id}) }}">show</a>
-
-        {% if app.user.id == subject.user.id %}
-        
-            <a href="{{ path('app_subject_edit', {'id': subject.id}) }}">edit</a>
-
-            
-            {{ include('subject/_delete_form.html.twig') }}
-        {% endif %}
+                
+                {{ include('subject/_delete_form.html.twig') }}
+            {% endif %}
+        </section>
     {% else %}
         <td colspan="4">no records found</td>
     {% endfor %}

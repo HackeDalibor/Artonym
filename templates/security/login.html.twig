@@ -1,10 +1,21 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Log in!{% endblock %}
-
+{% block stylesheet %}
+<style>
+    body {
+        background-color: url(/public/uploads/images/siteimage/background-photo.jpeg);
+    }
+</style>
+{% endblock %}
 {% block body %}
+<section>
+    faire texte de présentation du site , explication , en utilisant les balises strong et em pour le référencement
+</section>
     <section class="login">
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+
+    
+        <h1 class="h3 mb-3 font-weight-normal">Login</h1>
 
         <form method="post">
             {% if error %}
@@ -17,15 +28,17 @@
                 </div>
             {% endif %}
             
-            <label for="inputEmail">Email</label>
+            <label for="inputEmail" class="form-login">Email</label>
             <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" autocomplete="email" required autofocus>
-            <label for="inputPassword">Password</label>
+            <label for="inputPassword" class="form-login">Password</label>
             <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
 
             <input type="hidden" name="_csrf_token"
                 value="{{ csrf_token('authenticate') }}"
             >
 
+
+         
             {#
                 Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
                 See https://symfony.com/doc/current/security/remember_me.html
@@ -37,10 +50,12 @@
                 </div>
             #}
             
-            <button class="btn btn-lg btn-primary" type="submit">
+            <button class="btn btn-lg btn-primary form-login" type="submit">
                 Sign in
             </button>
         </form>
-        <p>Forgot password ? <a href="{{ path('app_forgot_password_request') }}">Click here !</a></p>
+        <p class="form-login">Forgot password ? <a href="{{ path('app_forgot_password_request') }}">Click here !</a></p>
     </section>
+
+
 {% endblock %}

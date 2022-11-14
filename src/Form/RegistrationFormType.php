@@ -63,7 +63,7 @@ class RegistrationFormType extends AbstractType
                     ])
                 ],
                 'type' => PasswordType::class,
-                'invalid_message' => 'Your passwords must be the same',
+                'invalid_message' => 'Your passwords must match on both sides',
                 'options' => ['attr' => ['class' => 'password-field']],
                 'required' => true,
                 'first_options'  => ['label' => 'Password'],

@@ -44,9 +44,13 @@ class UserController extends AbstractController
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
     public function show(User $user): Response
     {
-        return $this->render('user/show.html.twig', [
-            'user' => $user,
-        ]);
+        if($this->getUser() === $user) {
+            return $this->redirectToRoute('app_user_profile', [], Response::HTTP_SEE_OTHER);
+        } else {
+            return $this->render('user/show.html.twig', [
+                'user' => $user,
+            ]);
+        }
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
@@ -74,7 +78,7 @@ class UserController extends AbstractController
             $userRepository->remove($user, true);
         }
 
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_logout', [], Response::HTTP_SEE_OTHER);
     }
     
     #[Route('/unfollow/{id}', name: 'app_user_unfollow', methods: ['GET', 'POST'])]

@@ -7,7 +7,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
-use VictorPrdh\RecaptchaBundle\Form\ReCaptchaType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LoginType extends AbstractType
@@ -17,7 +16,6 @@ class LoginType extends AbstractType
         $builder
             ->add('email', EmailType::class)
             ->add('password', PasswordType::class)
-            // ->add('captcha', ReCaptchaType::class)
         ;
     }
 

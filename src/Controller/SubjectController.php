@@ -42,6 +42,7 @@ class SubjectController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $subject->setTitle($form->get('title')->getViewData());
+            $subject->setDescription($form->get('description')->getViewData());
             $subject->setCategory($categoryRepository->findOneBy(['id' => $form->get('category')->getViewData()]));
 
             $user = $this->getUser();
@@ -80,7 +81,7 @@ class SubjectController extends AbstractController
                 
                 //TODO : Ici envoi d'email à user
 
-                return $this->redirectToRoute('app_home_index', [], Response::HTTP_SEE_OTHER);
+                return $this->redirectToRoute('app_home', [], Response::HTTP_SEE_OTHER);
                     
                 }
             }
@@ -111,7 +112,7 @@ class SubjectController extends AbstractController
 
         return $this->render('subject/show.html.twig', [
             'subject' => $subject,
-            'formComment' => $formComment->createView(),
+            'formComment' => $formComment->createView(), //* ?? null renvoie la variable en null s'il ne trouve pas.
         ]);
     }
 
@@ -137,6 +138,8 @@ class SubjectController extends AbstractController
     public function delete(Request $request, Subject $subject, SubjectRepository $subjectRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$subject->getId(), $request->request->get('_token'))) {
+
+            // pour chaque image , lors du delete on set la clé etrangère user à null
             $subjectRepository->remove($subject, true);
         }
 

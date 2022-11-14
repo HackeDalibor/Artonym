@@ -8,21 +8,14 @@
     <h4>Created by {{ subject.user }}</h4>
     <p>{{ subject.creationDate }}</p>
 
-    <ul class="slides">
-        <input type="radio" name="radio-btn" id="img-1" checked />
+    <ul >
+      
         {% for image in subject.images %}
-            <li class="slide-container">
-                <div class="slide">
+            <li >
+                <div >
                     <img src="{{ asset('uploads/images/userimage/') }}{{ image }}" alt="{{ image }}">
                 </div>
-                <div class="nav">
-                    <label for="img-6" class="prev">&#x2039;</label>
-                    <label for="img-2" class="next">&#x203a;</label>
-                </div>
-            </li>
-
-            <li class="nav-dots">
-                <label for="img-1" class="nav-dot" id="img-dot-1"></label>
+                
             </li>
             
         {% endfor %}

@@ -48,10 +48,11 @@ class ReactionRepository extends ServiceEntityRepository
     }
 
     public function removeById($id)
+    // removes the entity by an id of the user
     {
         $qb = $this->createQueryBuilder('r');
         $qb->delete('Reaction', 'r')
-           ->andWhere('r.user_id = :id')
+           ->where('r.user_id = :id')
            ->setParameter('id', $id)
        ;
     }

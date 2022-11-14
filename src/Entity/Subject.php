@@ -39,6 +39,9 @@ class Subject
     #[ORM\OneToMany(mappedBy: 'subject', targetEntity: Reaction::class)]
     private Collection $reactions;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -204,5 +207,17 @@ class Subject
     public function __toString()
     {
         return $this->title;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
     }
 }

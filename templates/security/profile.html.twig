@@ -3,18 +3,51 @@
 {% block title %}Profile{% endblock %}
 
 {% block body %}
-    <h1>{{ user.nickname }}</h1>
-    <h3>Joined us on : {{ user.inscriptionDate }}</h3>
-    <p>{{ user.email }} ({{ user.isVerified ? 'Verified' : 'Not verified yet' }})</p>
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
 
-    <p>Followers : {{ user.followers|length }}</p>
-    <p>Following : {{ user.following|length }}</p>
+<div class="card profile-card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">{{ user.nickname }}</h5>
+        <p class="card-text">joined us in {{ user.inscriptionDate }}.</p>
+        <p>{{ user.email }} ({{ user.isVerified ? 'Verified' : 'Not verified yet' }})</p>
+        <p>Followers : {{ user.followers|length }}</p>
+        <p>Following : {{ user.following|length }}</p>
+    </div>
+</div>
 
+{% for subject in user.subjects %}
+        <section class="profile-section">
 
-    {% for subject in user.subjects %}
-        <p>{{ subject }}</p>
+            <h3>{{ subject }}</h3>
+            <p>{{ subject.category }}</p>
+            <p>{{ subject.creationDate }}</p>
+
+            <ul class="slides">
+                <input type="radio" name="radio-btn" id="img-1" checked />
+                {% for image in subject.images %}
+                    <li class="slide-container">
+                        <div class="slide">
+                            <img src="{{ asset('uploads/images/userimage/') }}{{ image }}" alt="{{ image }}">
+                        </div>
+                        <div class="nav">
+                            <label for="img-6" class="prev">&#x2039;</label>
+                            <label for="img-2" class="next">&#x203a;</label>
+                        </div>
+                    </li>
+
+                    <li class="nav-dots">
+                        <label for="img-1" class="nav-dot" id="img-dot-1"></label>
+                    </li>
+                {% endfor %}
+            </ul>
+            <p>{{ subject.comments|length }} comments</p>
+
+            <a href="{{ path('app_subject_show', {'id': subject.id}) }}">show</a>
+
+        </section>
+    {% else %}
+        <p>This user didn't create any subjects</p>
     {% endfor %}
+    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
 
     {{ include('user/_delete_form.html.twig') }}
 {% endblock %}

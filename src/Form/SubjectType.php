@@ -2,13 +2,15 @@
 
 namespace App\Form;
 
-use App\Entity\Category;
 use App\Entity\Subject;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use App\Entity\Category;
+use App\Form\ImageMultipleType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class SubjectType extends AbstractType
 {
@@ -20,6 +22,7 @@ class SubjectType extends AbstractType
                 'class' => Category::class,
                 'choice_label' => 'categoryType'
             ])
+            ->add('description', TextareaType::class)
             ->add('images', ImageMultipleType::class , [
                 'mapped' => false
             ])
