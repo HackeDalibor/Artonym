@@ -17,14 +17,20 @@ class SubjectType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('title', TextType::class)
+            ->add('title', TextType::class, [
+                'attr' => ["class" => "form-control"]
+            ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
-                'choice_label' => 'categoryType'
+                'choice_label' => 'categoryType',
+                'attr' => ["class" => "form-control"]
             ])
-            ->add('description', TextareaType::class)
+            ->add('description', TextareaType::class, [
+                'attr' => ["class" => "form-control"]
+            ])
             ->add('images', ImageMultipleType::class , [
-                'mapped' => false
+                'mapped' => false,
+                'attr' => ["class" => "form-control"]
             ])
         ;
     }

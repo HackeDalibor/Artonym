@@ -1,11 +1,12 @@
 {{ form_start(form) }}
     {{ form_row(form.title) }}
     {{ form_row(form.category) }}
+    {{ form_row(form.description) }}
 
     {% for image in form.images %}
         <li>
             {{ form_errors(image) }}
-            {{ form_widget(image) }}
+            {{ form_row(image) }}
         </li>
     {% endfor %}
 

@@ -22,11 +22,14 @@ class MessageType extends AbstractType
             ->add('sender', HiddenType::class, [
                 "empty_data" => $options['user']
             ])
-            ->add('title', TextType::class)
+            ->add('title', TextType::class, [
+                'attr' => ["class" => "form-control"]
+            ])
             ->add('content', CKEditorType::class)
             ->add('reciever', EntityType::class, [
                 "class" => User::class,
-                "choice_label" => "nickname"
+                "choice_label" => "nickname",
+                'attr' => ["class" => "form-control"]
             ])
             ->add('submit', SubmitType::class, [
                 "attr" => ["class" => "btn btn-primary"]

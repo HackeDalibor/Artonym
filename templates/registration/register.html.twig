@@ -2,6 +2,14 @@
 
 {% block title %}Register{% endblock %}
 
+{% block bodystyle %}
+    style="
+            background: url({{ asset('/uploads/images/siteimage/background-photo.jpeg') }});
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        "
+{% endblock %}
 {% block body %}
     <section class="register">
         {% for flash_error in app.flashes('verify_email_error') %}
