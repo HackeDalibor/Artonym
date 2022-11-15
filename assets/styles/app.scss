@@ -69,6 +69,9 @@ i {
     height: 20px;
     width: 20px;
     font-size: 20px;
+}
+
+i.header-i {
     color: white;
 }
 
@@ -102,8 +105,12 @@ article {
     background: white;
 }
 
-article.user-article {
+article.user-article, article.article-subject {
     background: none;
+}
+
+article.article-subject {
+    width: 90%;
 }
 
 aside {
@@ -152,6 +159,12 @@ section.notif {
 
 section.login {
     background: rgba(255, 255, 255, 0.637);
+}
+
+section.section-subject {
+    width: auto;
+    height: auto;
+    margin-bottom: 2em;
 }
 
 // *** End of Sections ***

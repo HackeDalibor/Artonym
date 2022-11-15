@@ -3,55 +3,62 @@
 {% block title %}Subject{% endblock %}
 
 {% block body %}
-    <h1>{{ subject }}</h1>
-    <p>{{ subject.category }}</p>
-    <h4>Created by {{ subject.user }}</h4>
-    <p>{{ subject.creationDate }}</p>
+    <article class="article-subject">
+        <section class="section-subject">
+            <h1>{{ subject }}</h1>
+            <p>{{ subject.category }}</p>
+            <h4>Created by {{ subject.user }}</h4>
+            <p>{{ subject.creationDate }}</p>
 
-    <ul >
-      
-        {% for image in subject.images %}
-            <li >
-                <div >
-                    <img src="{{ asset('uploads/images/userimage/') }}{{ image }}" alt="{{ image }}">
-                </div>
-                
-            </li>
+            <ul >
             
-        {% endfor %}
-    </ul>
-    <a href="{{ path('app_subject_reacted', {'id': subject.id}) }}" class="btn btn-link js-like">
-        {% if app.user and subject.isReactedByUser(app.user) %}
-            <i class="fas fa-thumbs-up"></i>
-        {% else %}
-            <i class="far fa-thumbs-up"></i>
+                {% for image in subject.images %}
+                    <li >
+                        <div >
+                            <img src="{{ asset('uploads/images/userimage/') }}{{ image }}" alt="{{ image }}">
+                        </div>
+                        
+                    </li>
+                    
+                {% endfor %}
+            </ul>
+            <a href="{{ path('app_subject_reacted', {'id': subject.id}) }}" class="btn btn-link js-like">
+                {% if app.user and subject.isReactedByUser(app.user) %}
+                    <i class="fas fa-thumbs-up"></i>
+                {% else %}
+                    <i class="far fa-thumbs-up"></i>
+                {% endif %}
+                
+                <span class="js-likes">{{ subject.reactions|length }}</span>
+                <span class="js-label">LIKES</span>
+            </a>
+            <p>{{ subject.comments|length }} comments</p>
+        </section>
+
+        <section class="section-subject">
+            <h2>COMMENTS</h2>
+            {% for comment in subject.comments %}
+                <p>{{ comment }}</p>
+            {% else %}
+                <p>Be the first one to comment !</p>
+            {% endfor %}
+
+            {{ form_start(formComment) }}
+                {{ form_widget(formComment.text) }}
+                <button type="submit">Send</button>
+            {{ form_end(formComment) }}
+        </section>
+
+        {# <a href="{{ path('app_subject_index') }}">back to list</a> #}
+
+        {% if app.user.id == subject.user.id %}
+        
+            <a href="{{ path('app_subject_edit', {'id': subject.id}) }}">edit</a>
+
+            
+            {{ include('subject/_delete_form.html.twig') }}
         {% endif %}
-        
-        <span class="js-likes">{{ subject.reactions|length }}</span>
-        <span class="js-label">LIKES</span>
-    </a>
-    <p>{{ subject.comments|length }} comments</p>
-
-    <h2>COMMENTS</h2>
-    {% for comment in subject.comments %}
-        <p>{{ comment }}</p>
-    {% endfor %}
-
-    {{ form_start(formComment) }}
-        {{ form_widget(formComment.text) }}
-        <button type="submit">Send</button>
-    {{ form_end(formComment) }}
-
-
-    <a href="{{ path('app_subject_index') }}">back to list</a>
-
-    {% if app.user.id == subject.user.id %}
-    
-        <a href="{{ path('app_subject_edit', {'id': subject.id}) }}">edit</a>
-
-        
-        {{ include('subject/_delete_form.html.twig') }}
-    {% endif %}
+    </article>
 {% endblock %}
 {% block js %}
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>

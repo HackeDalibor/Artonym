@@ -29,8 +29,8 @@
                             <li><a href="{{ path('app_user_index') }}">Users</a></li>
                         {% endif %}
                         <li><input type="search" name="search" id="search" placeholder="Search..."></li>
-                        <li><a href="{{ path('app_user_profile') }}" title="Profile"><i class="fa-regular fa-user"></i></a></li>
-                        <li><a href="{{ path('app_message_index') }}" title="messages"><i class="fa-regular fa-envelope"></i></a></li>
+                        <li><a href="{{ path('app_user_profile') }}" title="Profile"><i class="fa-regular fa-user header-i"></i></a></li>
+                        <li><a href="{{ path('app_message_index') }}" title="messages"><i class="fa-regular fa-envelope header-i"></i></a></li>
                         <li>
                             <a href="{{ path('app_notification_list') }}" title="Notifications">
                                 {% set nb = 0 %}
@@ -44,10 +44,10 @@
                                         {{ nb }}
                                     </div>
                                 {% endif %}
-                                <i class="fa-regular fa-bell"></i>
+                                <i class="fa-regular fa-bell header-i"></i>
                             </a>
                         </li>
-                        <li><a href="{{ path('app_logout') }}" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a></li>
+                        <li><a href="{{ path('app_logout') }}" title="Logout"><i class="fa-solid fa-right-from-bracke header-it"></i></a></li>
                     {% else %}
                         <li><a href="{{ path('app_register') }}">Register</a></li>
                         <li><a href="{{ path('app_login') }}">Login</a></li>
