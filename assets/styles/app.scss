@@ -8,11 +8,6 @@ body {
     background: rgb(231, 231, 231);
 }
 
-.login-background {
-    height: 100%;
-    width: 100%;
-}
-
 // *** Header ***
 header {
     height: 60px;
@@ -28,10 +23,21 @@ nav {
 }
 
 ul {
-    height: 100%;
+    margin: 0;
     display: flex;
     justify-content: space-around;
     align-items: center;
+}
+
+ul.header-ul {
+    height: 100%;
+}
+
+ul.second-header-ul {
+    height: 50%;
+    justify-content: space-evenly;
+    background-color: white;
+    border-radius: 0 0 2em 2em;
 }
 
 li {
@@ -65,6 +71,17 @@ i {
     font-size: 20px;
     color: white;
 }
+
+.nbNotifications {
+    position: relative;
+    bottom: 5px;
+    left: 10px;
+
+}
+
+a.header-category {
+    color: black;
+}
 // *** End of Header ***
 
 // *** Main ***
@@ -72,10 +89,36 @@ main {
     padding-top: 175px;
     width: 100%;
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
 }
+
+// *** Articles / Asides ***
+
+article {
+    margin: 0 5%;
+    height: 80%;
+    background: white;
+}
+
+article.user-article {
+    background: none;
+}
+
+aside {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+}
+
+aside.user-aside {
+    margin: 5%;
+}
+
+// *** End of Articles / Asides ***
+
+// *** Sections ***
 
 section {
     width: 70%;
@@ -98,6 +141,7 @@ section.profile-section {
     position: relative;
     left: 15em;
     bottom: 10em;
+    margin: 1em;
 }
 
 section.notif {
@@ -106,14 +150,28 @@ section.notif {
     justify-content: space-around;
 }
 
+section.login {
+    background: rgba(255, 255, 255, 0.637);
+}
+
+// *** End of Sections ***
+
 .notif i {
     color: red;
 }
 
+// *** Divs ***
+
 div.profile-card {
-    position: relative;
-    right: 30em;
+    margin: 0 0 0 1em;
 }
+
+div.card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+// *** End of Divs ***
 
 h1 {
     color: rgb(55, 79, 109);
@@ -122,6 +180,8 @@ h1 {
 .form-login {
     margin-top: 25px;
 }
+
+// *** End of Main ***
 
 // *** Footer ***
 
@@ -147,4 +207,4 @@ footer {
     height: 50px;
     width: 50px;
 }
-// *** End of footer ***
+// *** End of Footer ***

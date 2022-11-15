@@ -25,21 +25,10 @@
             <p>{{ subject.category }}</p>
             <p>{{ subject.creationDate }}</p>
 
-            <ul class="slides">
-                <input type="radio" name="radio-btn" id="img-1" checked />
+            <ul>
                 {% for image in subject.images %}
-                    <li class="slide-container">
-                        <div class="slide">
-                            <img src="{{ asset('uploads/images/userimage/') }}{{ image }}" alt="{{ image }}">
-                        </div>
-                        <div class="nav">
-                            <label for="img-6" class="prev">&#x2039;</label>
-                            <label for="img-2" class="next">&#x203a;</label>
-                        </div>
-                    </li>
-
-                    <li class="nav-dots">
-                        <label for="img-1" class="nav-dot" id="img-dot-1"></label>
+                    <li>
+                        <img src="{{ asset('uploads/images/userimage/') }}{{ image }}" alt="{{ image }}">
                     </li>
                 {% endfor %}
             </ul>
@@ -52,7 +41,9 @@
         <p>This user didn't create any subjects</p>
     {% endfor %}
 
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+        {{ include('user/_delete_form.html.twig') }}
+    {% endif %}
 
-    {{ include('user/_delete_form.html.twig') }}
 {% endblock %}

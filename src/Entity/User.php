@@ -80,6 +80,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Reaction::class)]
     private Collection $reactions;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $biography = null;
+
+    #[ORM\OneToOne(inversedBy: 'usersProfilePicture', cascade: ['persist', 'remove'])]
+    private ?Image $profilePicture = null;
+
     public function __construct()
     {
         $this->subjects = new ArrayCollection();
@@ -528,6 +534,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $reaction->setUser(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBiography(): ?string
+    {
+        return $this->biography;
+    }
+
+    public function setBiography(?string $biography): self
+    {
+        $this->biography = $biography;
+
+        return $this;
+    }
+
+    public function getProfilePicture(): ?Image
+    {
+        return $this->profilePicture;
+    }
+
+    public function setProfilePicture(?Image $profilePicture): self
+    {
+        $this->profilePicture = $profilePicture;
 
         return $this;
     }

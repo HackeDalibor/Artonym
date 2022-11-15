@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+    <div class="card profile-card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{ user.nickname }}</h5>
+            <p class="card-text">joined us in {{ user.inscriptionDate }}.</p>
+            <p>{{ user.email }} ({{ user.isVerified ? 'Verified' : 'Not verified yet' }})</p>
+            <a href="{{ path('app_user_profile') }}">Back to profile</a>
+            <a href="{{ path('app_user_followings') }}">Following : {{ user.following|length }}</a>
+            <a href="{{ path('app_user_edit', {'id': user.id}) }}">Edit your profile</a>
+        </div>
+    </div>
+    <div class="card profile-card" style="width: 18rem;">
+        <div class="card-body">
+            <h5>Bio :</h5>
+            <p>{{ user.biography }}</p>
+        </div>
+    </div>
+
+    <section class="profile-section">
+        
+        <h1>You have exactly {{ user.followers|length }}
+            {% if user.followers|length == 1 %}
+                follower :
+            {% elseif user.followers|length > 1 %}
+                followers :
+            {% endif %}
+        </h1>
+        {% for follower in user.followers %}
+
+            <a href="{{ path('app_user_show', {'id': follower.id}) }}">{{ follower }}</a>
+
+        {% else %}
+            <p>You don't have any followers</p>
+        {% endfor %}
+    </section>
+
+{% endblock %}

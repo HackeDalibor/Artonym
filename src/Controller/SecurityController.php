@@ -39,4 +39,20 @@ class SecurityController extends AbstractController
             'user' => $this->getUser(),
         ]);
     }
+
+    #[Route('/profile/followers', name: 'app_user_followers', methods: ['GET'])]
+    public function showFollowers(): Response
+    {
+        return $this->render('security/followers.html.twig', [
+            'user' => $this->getUser(),
+        ]);
+    }
+
+    #[Route('/profile/followings', name: 'app_user_followings', methods: ['GET'])]
+    public function showFollowings(): Response
+    {
+        return $this->render('security/followings.html.twig', [
+            'user' => $this->getUser(),
+        ]);
+    }
 }

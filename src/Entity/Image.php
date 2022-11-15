@@ -45,6 +45,9 @@ class Image
     #[ORM\OneToOne(inversedBy: 'image', cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
+    #[ORM\OneToOne(mappedBy: 'profilePicture', cascade: ['persist', 'remove'])]
+    private ?User $usersProfilePicture = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -117,5 +120,27 @@ class Image
     public function __toString()
     {
         return $this->data;
+    }
+
+    public function getUsersProfilePicture(): ?User
+    {
+        return $this->usersProfilePicture;
+    }
+
+    public function setUsersProfilePicture(?User $usersProfilePicture): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($usersProfilePicture === null && $this->usersProfilePicture !== null) {
+            $this->usersProfilePicture->setProfilePicture(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($usersProfilePicture !== null && $usersProfilePicture->getProfilePicture() !== $this) {
+            $usersProfilePicture->setProfilePicture($this);
+        }
+
+        $this->usersProfilePicture = $usersProfilePicture;
+
+        return $this;
     }
 }

@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+    <div class="card profile-card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{ user.nickname }}</h5>
+            <p class="card-text">joined us in {{ user.inscriptionDate }}.</p>
+            <p>{{ user.email }} ({{ user.isVerified ? 'Verified' : 'Not verified yet' }})</p>
+            <a href="{{ path('app_user_followers') }}">Followers : {{ user.followers|length }}</a>
+            <a href="{{ path('app_user_profile') }}">Back to profile</a>
+            <a href="{{ path('app_user_edit', {'id': user.id}) }}">Edit your profile</a>
+        </div>
+    </div>
+    <div class="card profile-card" style="width: 18rem;">
+        <div class="card-body">
+            <h5>Bio :</h5>
+            <p>{{ user.biography }}</p>
+        </div>
+    </div>
+
+    <section class="profile-section">
+        
+        <h1>
+            You followed exactly {{ user.following|length }}  
+            {% if user.following|length == 1 %}
+                person
+            {% elseif user.following|length > 1 %}
+                persons
+            {% endif %}
+            :
+        </h1>
+        {% for followed in user.following %}
+
+            <a href="{{ path('app_user_show', {'id': user.id}) }}">{{ followed }}</a>
+            <a href="{{ path('app_user_unfollow', {id: user.id}) }}">Unfollow</a>
+            <br>
+
+        {% else %}
+            <p>Nobody followed you yet</p>
+        {% endfor %}
+    </section>
+
+{% endblock %}

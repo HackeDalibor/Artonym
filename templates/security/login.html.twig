@@ -1,12 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Log in!{% endblock %}
-{% block stylesheet %}
-<style>
-    body {
-        background-color: url(/public/uploads/images/siteimage/background-photo.jpeg);
-    }
-</style>
+{% block bodystyle %}
+    style="
+            background: url({{ asset('/uploads/images/siteimage/background-photo.jpeg') }});
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        "
 {% endblock %}
 {% block body %}
 <section>

@@ -17,10 +17,10 @@
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body>
+    <body {% block bodystyle %}{% endblock %}>
         <header>
             <nav>
-                <ul>
+                <ul class="header-ul">
                     <li><a href="{{ path('app_home') }}"><img src="{{ asset('uploads/images/siteimage/artonym_logo.png') }}" alt="artonym logo"></a></li>
                     {% if app.user %}
                         {% if is_granted('ROLE_ADMIN') %}
@@ -31,9 +31,8 @@
                         <li><input type="search" name="search" id="search" placeholder="Search..."></li>
                         <li><a href="{{ path('app_user_profile') }}" title="Profile"><i class="fa-regular fa-user"></i></a></li>
                         <li><a href="{{ path('app_message_index') }}" title="messages"><i class="fa-regular fa-envelope"></i></a></li>
-                        <li><a href="{{ path('app_direct_message_index') }}"><i class="fa-regular fa-message"></i></a></li>
                         <li>
-                            <a href="{{ path('app_notification_list') }}">
+                            <a href="{{ path('app_notification_list') }}" title="Notifications">
                                 {% set nb = 0 %}
                                 {% for notification in app.user.notifications %}
                                     {% if notification.isRead == 0 %}
@@ -48,12 +47,13 @@
                                 <i class="fa-regular fa-bell"></i>
                             </a>
                         </li>
-                        <li><a href="{{ path('app_logout') }}"><i class="fa-solid fa-right-from-bracket"></i></a></li>
+                        <li><a href="{{ path('app_logout') }}" title="Logout"><i class="fa-solid fa-right-from-bracket"></i></a></li>
                     {% else %}
                         <li><a href="{{ path('app_register') }}">Register</a></li>
                         <li><a href="{{ path('app_login') }}">Login</a></li>
                     {% endif %}
                 </ul>
+                {% block categories %}{% endblock %}
             </nav>
         </header>
         <main>
@@ -102,7 +102,6 @@
 
 
             {% block body %}{% endblock %}
-            {% block js %}{% endblock %}
         </main>
         <footer>
             <figure class="figure-footer">
@@ -115,5 +114,6 @@
             <a href="#">Terms of Service</a> {#* CGU (Conditions générales d'utilisation) #}
             <a href="#">Legal Notices</a> {#* mentions légales #}
         </footer>
+        {% block js %}{% endblock %}
     </body>
 </html>
