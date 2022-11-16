@@ -10,18 +10,22 @@
                 <h5 class="card-title">{{ user.nickname }}</h5>
                 <p class="card-text">joined us in {{ user.inscriptionDate }}.</p>
                 <p>{{ user.email }} ({{ user.isVerified ? 'Verified' : 'Not verified yet' }})</p>
-                <a href="{{ path('app_user_followers') }}">Followers : {{ user.followers|length }}</a>
-                <a href="{{ path('app_user_followings') }}">Following : {{ user.following|length }}</a>
-                <a href="{{ path('app_user_edit', {'id': user.id}) }}">Edit your profile</a>
+                <div class="profile-more">
+                    <a href="{{ path('app_user_followers') }}" class="btn btn-info profile-btn">Followers : {{ user.followers|length }}</a>
+                    <a href="{{ path('app_user_followings') }}" class="btn btn-info profile-btn">Following : {{ user.following|length }}</a>
+                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-warning profile-btn">Edit your profile</a>
+                </div>
                 {{ include('user/_delete_form.html.twig') }}
             </div>
         </div>
-        <div class="card profile-card" style="width: 18rem;">
-            <div class="card-body">
-                <h5>Bio :</h5>
-                <p>{{ user.biography }}</p>
+        {% if user.biography %}
+            <div class="card profile-card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5>Bio :</h5>
+                    <p>{{ user.biography }}</p>
+                </div>
             </div>
-        </div>
+        {% endif %}
     </article>
     <aside class="user-aside">
         {% for subject in user.subjects %}

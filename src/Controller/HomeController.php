@@ -21,7 +21,7 @@ class HomeController extends AbstractController
 
             foreach($this->getUser()->getFollowing() as $following) {
                 return $this->render('home/index.html.twig', [
-                    'subjects' => $subjectRepository->findBy(['user' => $following], ['creationDate' => 'DESC'], 15),
+                    'subjects' => $subjectRepository->findBy(['user' => $following, 'user' => $this->getUser()], ['creationDate' => 'DESC'], 15),
                     'categories' => $categoryRepository->findAll(),
                 ]);
             }

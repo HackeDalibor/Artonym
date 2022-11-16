@@ -21,7 +21,7 @@
         <header>
             <nav>
                 <ul class="header-ul">
-                    <li><a href="{{ path('app_home') }}"><img src="{{ asset('uploads/images/siteimage/artonym_logo.png') }}" alt="artonym logo"></a></li>
+                    <li><a href="{{ path('app_home') }}"><img src="{{ asset('uploads/images/siteimage/artonym_logo.png') }}" alt="artonym logo" class="header-logo"></a></li>
                     {% if app.user %}
                         {% if is_granted('ROLE_ADMIN') %}
                             <li><a href="{{ path('app_subject_index') }}">Subjects</a></li>
@@ -32,22 +32,30 @@
                         <li><a href="{{ path('app_user_profile') }}" title="Profile"><i class="fa-regular fa-user header-i"></i></a></li>
                         <li><a href="{{ path('app_message_index') }}" title="messages"><i class="fa-regular fa-envelope header-i"></i></a></li>
                         <li>
-                            <a href="{{ path('app_notification_list') }}" title="Notifications">
-                                {% set nb = 0 %}
-                                {% for notification in app.user.notifications %}
-                                    {% if notification.isRead == 0 %}
-                                        {% set nb = nb + 1 %}
-                                    {% endif %}
-                                {% endfor %}
-                                {% if nb >= 1 %}    
-                                    <div class="nbNotifications">
-                                        {{ nb }}
-                                    </div>
-                                {% endif %}
+                            <a href="{{ path('app_notification_list') }}" title="Notifications" class="notification-header">
                                 <i class="fa-regular fa-bell header-i"></i>
                             </a>
+                            {% set nb = 0 %}
+                            {% for notification in app.user.notifications %}
+                                {% if notification.isRead == 0 %}
+                                    {% set nb = nb + 1 %}
+                                {% endif %}
+                            {% endfor %}
+                            {% if nb >= 1 and nb < 10 %}    
+                                <div class="nbNotifications">
+                                    {{ nb }}
+                                </div>
+                            {% elseif nb >= 10 and nb < 100 %}
+                                <div class="nbNotifications nbMoreNotifications">
+                                    {{ nb }}
+                                </div>
+                            {% elseif nb > 99 %}
+                                <div class="nbNotifications nbMoreNotifications">
+                                    +99
+                                </div>
+                            {% endif %}
                         </li>
-                        <li><a href="{{ path('app_logout') }}" title="Logout"><i class="fa-solid fa-right-from-bracke header-it"></i></a></li>
+                        <li><a href="{{ path('app_logout') }}" title="Logout"><i class="fa-solid fa-right-from-bracket header-i"></i></a></li>
                     {% else %}
                         <li><a href="{{ path('app_register') }}">Register</a></li>
                         <li><a href="{{ path('app_login') }}">Login</a></li>

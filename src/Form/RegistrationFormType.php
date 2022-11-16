@@ -43,7 +43,6 @@ class RegistrationFormType extends AbstractType
                 // 'mapped' => false,
                 'attr' => [
                     'autocomplete' => 'new-password',
-                    'class' => 'form-control'
                 ],
                 'constraints' => [
                     new NotBlank([
@@ -72,7 +71,7 @@ class RegistrationFormType extends AbstractType
                 ],
                 'type' => PasswordType::class,
                 'invalid_message' => 'Your passwords must match on both sides',
-                'options' => ['attr' => ['class' => 'password-field']],
+                'options' => ['attr' => ['class' => 'password-field form-control']],
                 'required' => true,
                 'first_options'  => ['label' => 'Password'],
                 'second_options' => ['label' => 'Repeat Password'],

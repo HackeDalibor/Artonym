@@ -2,6 +2,13 @@
 
 {% block title %}Home{% endblock %}
 
+{% block categories %}
+<ul class="second-header-ul">
+    {% for category in categories %}
+        <a href="{{ path('app_category_show', {'id': category.id}) }}" class="header-category">{{ category }}</a>
+    {% endfor %}
+</ul>
+{% endblock %}
 {% block body %}
 
     <h1>WELCOME {{ app.user.nickname }} !</h1>
