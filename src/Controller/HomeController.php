@@ -28,7 +28,9 @@ class HomeController extends AbstractController
                     'categories' => $categoryRepository->findAll(),
                 ]);
             }
-            return $this->render('home/nofollowing.html.twig');
+            return $this->render('home/nofollowing.html.twig', [
+                'categories' => $categoryRepository->findAll(),
+            ]);
         }
     }
 
