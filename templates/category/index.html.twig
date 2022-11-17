@@ -4,17 +4,19 @@
 
 {% block body %}
     
-    <h1>CATEGORIES</h1>
+    <section>
+        <h1>CATEGORIES</h1>
+        
+        {% for category in categories %}
+            <a href="{{ path('app_category_show', {'id': category.id}) }}">{{ category.categoryType }}</a>
     
-    {% for category in categories %}
-        <a href="{{ path('app_category_show', {'id': category.id}) }}">{{ category.categoryType }}</a>
-
-        {% if is_granted('ROLE_ADMIN') %}
-            <a href="{{ path('app_category_edit', {'id': category.id}) }}">edit</a>
-        {% endif %}
-    {% else %}
-        <p>no records found</p>
-    {% endfor %}
+            {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('app_category_edit', {'id': category.id}) }}">edit</a>
+            {% endif %}
+        {% else %}
+            <p>no records found</p>
+        {% endfor %}
+    </section>
 
     {% if is_granted('ROLE_ADMIN') %}
         <a href="{{ path('app_category_new') }}">Create new</a>

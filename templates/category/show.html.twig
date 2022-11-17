@@ -2,20 +2,56 @@
 
 {% block title %}{{ category.categoryType }}{% endblock %}
 
-{% block body %}
-    <h1>{{ category.categoryType }}</h1>
-
-    {% for subject in category.subjects %}
-        <p>{{ subject }}</p>
-    {% else %}
-        <p>no records found</p>
+{% block categories %}
+<ul class="second-header-ul">
+    {% for categorie in categories %}
+        {% if categorie != category %}
+            <a href="{{ path('app_category_show', {'id': categorie.id}) }}" class="header-category">{{ categorie }}</a>
+        {% endif %}
     {% endfor %}
+</ul>
+{% endblock %}
 
-    <a href="{{ path('app_category_index') }}">back to list</a>
+{% block body %}
 
-    {% if is_granted('ROLE_ADMIN') %}
-        <a href="{{ path('app_category_edit', {'id': category.id}) }}">edit</a>
+    <article class="article-subject">
+        <h1>{{ category.categoryType }}</h1>
+    
+        {% for subject in category.subjects %}
+            <section class="container">
+                <h1>{{ subject }}</h1>
+                <p>{{ subject.category }}</p>
+                <h4>Created by {{ subject.user }}</h4>
+                <p>{{ subject.creationDate }}</p>
 
-        {{ include('category/_delete_form.html.twig') }}
-    {% endif %}
+                <ul>
+                    {% for image in subject.images %}
+                        <li>
+                            <img src="{{ asset('uploads/images/userimage/') }}{{ image }}" alt="{{ image }}">
+                        </li>
+                        
+                    {% endfor %}
+                </ul>
+                <p>{{ subject.comments|length }} comments</p>
+
+                <a href="{{ path('app_subject_show', {'id': subject.id}) }}">show</a>
+
+                {% if app.user.id == subject.user.id %}
+                
+                    <a href="{{ path('app_subject_edit', {'id': subject.id}) }}">edit</a>
+
+                    
+                    {{ include('subject/_delete_form.html.twig') }}
+                {% endif %}
+            </section>
+        {% else %}
+            <p>no records found</p>
+        {% endfor %}
+    
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('app_category_edit', {'id': category.id}) }}">edit</a>
+    
+            {{ include('category/_delete_form.html.twig') }}
+        {% endif %}
+    </article>
 {% endblock %}
