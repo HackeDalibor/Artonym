@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity(repositoryClass: SubjectRepository::class)]
+#[ORM\Index(name: 'subject_idx', columns: ['title'], flags: ['fulltext'])]
 class Subject
 {
     #[ORM\Id]

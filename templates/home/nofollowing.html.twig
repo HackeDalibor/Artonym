@@ -10,6 +10,10 @@
 </ul>
 {% endblock %}
 {% block body %}
+    
+    <article>
+        <a href="{{ path('app_subject_new') }}" class="btn btn-primary">Create new</a>
+    </article>
 
     <h1>WELCOME {{ app.user.nickname }} !</h1>
 {% endblock %}

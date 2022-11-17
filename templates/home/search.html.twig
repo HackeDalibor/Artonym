@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Search{% endblock %}
+
+{% block body %}
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+    {{ form_end(form) }}
+    <article>
+        <h1>Users :</h1>
+        {% for user in users %}
+            <div class="card profile-card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{{ path('app_user_show', {'id': user.id}) }}">{{ user.nickname }}</a></h5>
+                    <p class="card-text">joined us in {{ user.inscriptionDate }}.</p>
+                    
+                    {% if user.followers.contains(app.user) %}
+                        <a href="{{ path('app_user_unfollow', {id: user.id}) }}" class="btn btn-primary follow-user">Unfollow</a>
+                    {% else %}
+                        <a href="{{ path('app_user_follow', {id: user.id}) }}" class="btn btn-primary follow-user">Follow</a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </article>
+    <aside>
+        <h2>Subjects :</h2>
+        {% for subject in subjects %}
+            <section>
+                <h3>{{ subject }}</h3>
+                <p>{{ subject.category }}</p>
+                <h4>Created by {{ subject.user }}</h4>
+                <p>{{ subject.creationDate }}</p>
+
+                <ul>
+                    {% for image in subject.images %}
+                        <li>
+                            <img src="{{ asset('uploads/images/userimage/') }}{{ image }}" alt="{{ image }}">
+                        </li>
+                        
+                    {% endfor %}
+                </ul>
+                <p>{{ subject.comments|length }} comments</p>
+
+                <a href="{{ path('app_subject_show', {'id': subject.id}) }}">show</a>
+
+                {% if app.user.id == subject.user.id %}
+                
+                    <a href="{{ path('app_subject_edit', {'id': subject.id}) }}">edit</a>
+
+                    
+                    {{ include('subject/_delete_form.html.twig') }}
+                {% endif %}
+            </section>
+        {% else %}
+            <td colspan="4">no records found</td>
+        {% endfor %}
+    </aside>
+
+{% endblock %}

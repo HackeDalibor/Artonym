@@ -39,6 +39,16 @@ class SubjectRepository extends ServiceEntityRepository
         }
     }
 
+    public function searchSubject($keywords) {
+        $query = $this->createQueryBuilder('s');
+        if($keywords != null) {
+            $query->where('MATCH_AGAINST(s.title) AGAINST(:keywords boolean)>0')
+                ->setParameter('keywords', $keywords);
+        }
+
+        return $query->getQuery()->getResult();
+    }
+
 //    /**
 //     * @return Subject[] Returns an array of Subject objects
 //     */
