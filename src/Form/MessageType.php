@@ -31,9 +31,6 @@ class MessageType extends AbstractType
                 "choice_label" => "nickname",
                 'attr' => ["class" => "form-control"]
             ])
-            ->add('submit', SubmitType::class, [
-                "attr" => ["class" => "btn btn-primary"]
-            ])
         ;
     }
 

@@ -17,7 +17,7 @@ class MessageController extends AbstractController
     #[Route('/', name: 'app_message_index', methods: ['GET'])]
     public function index(MessageRepository $messageRepository): Response
     {
-        return $this->render('message/app.html.twig', [
+        return $this->render('message/index.html.twig', [
             'messages' => $messageRepository->findAll(),
         ]);
     }
