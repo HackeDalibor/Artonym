@@ -17,12 +17,7 @@ class SearchResultsType extends AbstractType
                 'label' => false,
                 'attr' => [
                     'class' => 'form-control mr-sm-2',
-                    'placeholder' => 'Enter a keyword'
-                ]
-            ])
-            ->add('Search', SubmitType::class, [
-                'attr' => [
-                    'class' => 'btn btn-outline-success my-2 my-sm-0'
+                    'placeholder' => 'Enter a keyword',
                 ]
             ])
         ;

@@ -24,7 +24,7 @@ class HomeController extends AbstractController
 
             foreach($this->getUser()->getFollowing() as $following) {
                 return $this->render('home/index.html.twig', [
-                    'subjects' => $subjectRepository->findBy(['user' => $following, 'user' => $this->getUser()], ['creationDate' => 'DESC'], 15),
+                    'subjects' => $subjectRepository->findBy(['user' => [$following, $this->getUser()]], ['creationDate' => 'DESC'], 15),
                     'categories' => $categoryRepository->findAll(),
                 ]);
             }
@@ -57,6 +57,7 @@ class HomeController extends AbstractController
 
             } else {
                 $users = $userRepository->searchUser($search->get('keywords')->getData());
+                $subjects = $subjectRepository->findBy(['user' => $users], ['creationDate' => 'DESC'], 30);
             }
         }
 
