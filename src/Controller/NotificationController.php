@@ -52,12 +52,14 @@ class NotificationController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_notification_delete', methods: ['POST', 'GET'])]
-    public function delete(Request $request, Notification $notification, NotificationRepository $notificationRepository): Response
+    public function delete(Notification $notification ,NotificationRepository $notificationRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$notification->getId(), $request->request->get('_token'))) {
-            $notificationRepository->remove($notification, true);
-        }
+        
+        $notificationRepository->remove($notification, true);
+        // Delete a notification from DB
+        // The notification will automatically dissapear online 
 
-        return $this->redirectToRoute('app_notification_list', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute("app_notification_list", [], Response::HTTP_SEE_OTHER);
+        // Redirection
     }
 }

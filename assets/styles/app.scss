@@ -44,6 +44,11 @@ li {
     display: block;
 }
 
+li.li-notif {
+    width: 20px;
+    height: 24px;
+}
+
 header a {
     font-size: 16px;
     color: white;
@@ -109,12 +114,16 @@ article {
     background: white;
 }
 
-article.user-article, article.article-subject {
+article.user-article, article.article-subject, article.article-notif {
     background: none;
 }
 
 article.article-subject {
     width: 90%;
+}
+
+article.article-notif {
+    width: 75%;
 }
 
 aside {
