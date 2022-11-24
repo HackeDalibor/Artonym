@@ -33,8 +33,11 @@ class SubjectController extends AbstractController
     }
 
     #[Route('/new', name: 'app_subject_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, SluggerInterface $slugger, SubjectRepository $subjectRepository,
-                        ImageRepository $imageRepository, NotificationService $notificationService, CategoryRepository $categoryRepository)
+    public function new(Request $request, SluggerInterface $slugger,
+                        SubjectRepository $subjectRepository,
+                        ImageRepository $imageRepository,
+                        NotificationService $notificationService,
+                        CategoryRepository $categoryRepository)
     {
         $subject =  new Subject();
         $form = $this->createForm(SubjectType::class);
@@ -76,7 +79,7 @@ class SubjectController extends AbstractController
                     $image->setSubject($subject);
                     $imageRepository->add($image, true);
                 }
-
+                
                 $notificationService->newNotification($subject, $user);
                 
                 //TODO : Ici envoi d'email à user
@@ -112,6 +115,7 @@ class SubjectController extends AbstractController
 
         return $this->render('subject/show.html.twig', [
             'subject' => $subject,
+            'comments' => $commentRepository->findBy(['subject' => $subject], ['commentDate' => 'DESC'], 10),
             'formComment' => $formComment->createView(), //* ?? null renvoie la variable en null s'il ne trouve pas.
         ]);
     }

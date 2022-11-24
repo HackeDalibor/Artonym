@@ -7,7 +7,7 @@
         <section class="section-subject">
             <h1>{{ subject }}</h1>
             <p>{{ subject.category }}</p>
-            <h4>Created by {{ subject.user }}</h4>
+            <h4>Created by <a href="{{ path('app_user_show', {'id': subject.user.id}) }}">{{ subject.user }}</a></h4>
             <p>{{ subject.creationDate }}</p>
 
             <ul >
@@ -37,8 +37,11 @@
 
         <section class="section-subject">
             <h2>COMMENTS</h2>
-            {% for comment in subject.comments %}
-                <p>{{ comment }}</p>
+            {% for comment in comments %}
+                <div class="comment">
+                    <p></p><a href="{{ path('app_user_show', {'id': comment.user.id}) }}">{{ comment.user }}</a> {{ comment.commentDate }}</p>
+                    <p>{{ comment }}</p>
+                </div>
             {% else %}
                 <p>Be the first one to comment !</p>
             {% endfor %}

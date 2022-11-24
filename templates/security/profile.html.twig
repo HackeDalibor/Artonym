@@ -11,8 +11,8 @@
                 <p class="card-text">joined us in {{ user.inscriptionDate }}.</p>
                 <p>{{ user.email }} ({{ user.isVerified ? 'Verified' : 'Not verified yet' }})</p>
                 <div class="profile-more">
-                    <a href="{{ path('app_user_followers') }}" class="btn btn-info profile-btn">Followers : {{ user.followers|length }}</a>
-                    <a href="{{ path('app_user_followings') }}" class="btn btn-info profile-btn">Following : {{ user.following|length }}</a>
+                    <a href="{{ path('app_security_followers') }}" class="btn btn-info profile-btn">Followers : {{ user.followers|length }}</a>
+                    <a href="{{ path('app_security_followings') }}" class="btn btn-info profile-btn">Following : {{ user.following|length }}</a>
                     <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-warning profile-btn">Edit your profile</a>
                 </div>
                 {{ include('user/_delete_form.html.twig') }}

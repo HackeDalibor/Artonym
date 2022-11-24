@@ -29,30 +29,51 @@
                             <li><a href="{{ path('app_user_index') }}">Users</a></li>
                         {% endif %}
                         <li><a href="{{ path('app_home_search') }}"><i class="fa-solid fa-magnifying-glass"></i></a></li>
-                        <li><a href="{{ path('app_user_profile') }}" title="Profile"><i class="fa-regular fa-user header-i"></i></a></li>
+                        <li><a href="{{ path('app_security_profile') }}" title="Profile"><i class="fa-regular fa-user header-i"></i></a></li>
                         <li><a href="{{ path('app_message_index') }}" title="messages"><i class="fa-regular fa-envelope header-i"></i></a></li>
                         <li class="li-notif">
                             <a href="{{ path('app_notification_list') }}" title="Notifications" class="notification-header">
                                 <i class="fa-regular fa-bell header-i"></i>
                             </a>
                             {% set nb = 0 %}
+                            {# This will be the number of the notifications #}
+
                             {% for notification in app.user.notifications %}
+                            {# for each notification that user has #}
+
                                 {% if notification.isRead == 0 %}
+                                {# we will verify if the notification is read #}
+
                                     {% set nb = nb + 1 %}
+                                    {# if not the variable "nb" will increase by 1 #}
+
                                 {% endif %}
                             {% endfor %}
-                            {% if nb >= 1 and nb < 10 %}    
+                            {% if nb >= 1 and nb < 10 %}
+                            {# if the nb is bigger or equal to 1 and if it's smaller than 10 we'll add only one class to our div #}
+
                                 <div class="nbNotifications">
                                     {{ nb }}
                                 </div>
+
                             {% elseif nb >= 10 and nb < 100 %}
+                            {#
+                                else if the nb is bigger or equal to 10 and if it's smaller than 100, 
+                                we'll add another class that will increase the width of our div
+                                so the rest of the numbers can stay
+                            #}
+                            
                                 <div class="nbNotifications nbMoreNotifications">
                                     {{ nb }}
                                 </div>
+
                             {% elseif nb > 99 %}
+                            {# the limit of the numbers will be +99 #}
+
                                 <div class="nbNotifications nbMoreNotifications">
                                     +99
                                 </div>
+                                
                             {% endif %}
                         </li>
                         <li><a href="{{ path('app_logout') }}" title="Logout"><i class="fa-solid fa-right-from-bracket header-i"></i></a></li>

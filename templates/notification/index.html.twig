@@ -1,12 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Notification index{% endblock %}
+{% block title %}Notification list{% endblock %}
 
 {% block body %}
 
 <article class="article-notif">
     {% for notification in app.user.notifications %}
-       <section class="notif"> {{ notification }} <a href="{{ path('app_notification_delete', {'id': notification.id}) }}"><i class="fa-solid fa-xmark"></i></a> </section>
+       <section class="notif">
+            {{ notification }}
+            <a href="{{ path('app_notification_delete', {'id': notification.id}) }}"><i class="fa-solid fa-xmark"></i></a>
+        </section>
     {% endfor %}
 </article>
 

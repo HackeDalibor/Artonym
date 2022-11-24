@@ -15,9 +15,8 @@
                     <a href="{{ path('app_user_follow', {id: user.id}) }}" class="btn btn-primary follow-user">Follow</a>
                 {% endif %}
                 <div class="profile-more">
-                    <a href="{{ path('app_user_followers') }}" class="btn btn-info profile-btn">Followers : {{ user.followers|length }}</a>
-                    <a href="{{ path('app_user_followings') }}" class="btn btn-info profile-btn">Following : {{ user.following|length }}</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-warning profile-btn">Edit your profile</a>
+                    <a href="{{ path('app_user_followers', {'id': user.id}) }}" class="btn btn-info profile-btn">Followers : {{ user.followers|length }}</a>
+                    <a href="{{ path('app_user_followings', {'id': user.id}) }}" class="btn btn-info profile-btn">Following : {{ user.following|length }}</a>
                 </div>
             </div>
         </div>

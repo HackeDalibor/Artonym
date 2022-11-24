@@ -32,7 +32,7 @@ class SecurityController extends AbstractController
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 
-    #[Route('/profile', name: 'app_user_profile', methods: ['GET'])]
+    #[Route('/profile', name: 'app_security_profile', methods: ['GET'])]
     public function showSelf(): Response
     {
         return $this->render('security/profile.html.twig', [
@@ -40,7 +40,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/profile/followers', name: 'app_user_followers', methods: ['GET'])]
+    #[Route('/profile/followers', name: 'app_security_followers', methods: ['GET'])]
     public function showFollowers(): Response
     {
         return $this->render('security/followers.html.twig', [
@@ -48,7 +48,7 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/profile/followings', name: 'app_user_followings', methods: ['GET'])]
+    #[Route('/profile/followings', name: 'app_security_followings', methods: ['GET'])]
     public function showFollowings(): Response
     {
         return $this->render('security/followings.html.twig', [

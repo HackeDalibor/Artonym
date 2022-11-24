@@ -45,7 +45,7 @@ class UserController extends AbstractController
     public function show(User $user): Response
     {
         if($this->getUser() === $user) {
-            return $this->redirectToRoute('app_user_profile', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_security_profile', [], Response::HTTP_SEE_OTHER);
         } else {
             return $this->render('user/show.html.twig', [
                 'user' => $user,
@@ -113,5 +113,28 @@ class UserController extends AbstractController
 
     }
     
+    #[Route('/{id}/followers', name: 'app_user_followers', methods: ['GET'])]
+    public function showFollowers(User $user): Response
+    {
+        if($this->getUser() === $user) {
+            return $this->redirectToRoute('app_security_profile', [], Response::HTTP_SEE_OTHER);
+        } else {
+            return $this->render('user/followers.html.twig', [
+                'user' => $user,
+            ]);
+        }
+    }
+
+    #[Route('/{id}/followings', name: 'app_user_followings', methods: ['GET'])]
+    public function showFollowings(User $user): Response
+    {
+        if($this->getUser() === $user) {
+            return $this->redirectToRoute('app_security_profile', [], Response::HTTP_SEE_OTHER);
+        } else {
+            return $this->render('user/followings.html.twig', [
+                'user' => $user,
+            ]);
+        }
+    }
 
 }

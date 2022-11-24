@@ -8,10 +8,8 @@
             <div class="card-body">
                 <h5 class="card-title">{{ user.nickname }}</h5>
                 <p class="card-text">joined us in {{ user.inscriptionDate }}.</p>
-                <p>{{ user.email }} ({{ user.isVerified ? 'Verified' : 'Not verified yet' }})</p>
-                <a href="{{ path('app_security_profile') }}" class="btn btn-info profile-btn">Back to profile</a>
-                <a href="{{ path('app_security_followings') }}" class="btn btn-info profile-btn">Following : {{ user.following|length }}</a>
-                <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-warning profile-btn">Edit your profile</a>
+                <a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn btn-info profile-btn">Back to profile</a>
+                <a href="{{ path('app_user_followings', {'id': user.id}) }}" class="btn btn-info profile-btn">Following : {{ user.following|length }}</a>
             </div>
         </div>
         <div class="card profile-card" style="width: 18rem;">
@@ -25,7 +23,7 @@
     <aside class="user-aside">
         <section class="profile-section">
             
-            <h1>You have exactly {{ user.followers|length }}
+            <h1>They have exactly {{ user.followers|length }}
                 {% if user.followers|length == 1 %}
                     follower :
                 {% elseif user.followers|length > 1 %}
