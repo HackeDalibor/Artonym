@@ -11,8 +11,31 @@
 {% endblock %}
 {% block body %}
 
-    <article>
-        <a href="{{ path('app_subject_new') }}" class="btn btn-primary">Create new</a>
+    <article class="user-article">
+        <div class="card profile-card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{ app.user.nickname }}</h5>
+                <p class="card-text">joined us in {{ app.user.inscriptionDate }}.</p>
+                <p>{{ app.user.email }} ({{ app.user.isVerified ? 'Verified' : 'Not verified yet' }})</p>
+                <div class="profile-more">
+                    <p>Followers : {{ app.user.followers|length }}</p>
+                    <p>Following : {{ app.user.following|length }}</p>
+                    <a href="{{ path('app_security_profile') }}" class="btn btn-primary profile-btn">View your profile</a>
+                    <a href="{{ path('app_user_edit', {'id': app.user.id}) }}" class="btn btn-warning profile-btn">Edit your profile</a>
+                </div>
+            </div>
+        </div>
+        {% if app.user.biography %}
+            <div class="card profile-card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5>Bio :</h5>
+                    <p>{{ app.user.biography }}</p>
+                </div>
+            </div>
+        {% endif %}
+        <div class="card profile-card" style="width: 18rem;">
+            <a href="{{ path('app_subject_new') }}" class="btn btn-primary">Create new Subject</a>
+        </div>
     </article>
     <aside>
         {% for subject in subjects %}
@@ -22,7 +45,7 @@
                 <h4>Created by {{ subject.user }}</h4>
                 <p>{{ subject.creationDate }}</p>
 
-                <ul>
+                <ul class="img-block">
                     {% for image in subject.images %}
                         <li>
                             <img src="{{ asset('uploads/images/userimage/') }}{{ image }}" alt="{{ image }}">

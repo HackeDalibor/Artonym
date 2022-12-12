@@ -2,10 +2,16 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-}
+    font-family: 'Nerko One', cursive;
+  }
 
 body {
-    background: rgb(231, 231, 231);
+    background-image: url("../../public/uploads/images/siteimage/composition-of-messy-stationery-tools-for-drawing2.jpg") !important;
+    background-position: center;
+    background-repeat: repeat;
+    background-size: cover;
+    background-color: rgba(255, 179, 37, 0.295);
+    background-blend-mode: multiply;
 }
 
 // *** Header ***
@@ -14,7 +20,7 @@ header {
     width: 100%;
     position: absolute;
     margin-top: 30px;
-    background: #103374;
+    background: #7c2f11;
 }
 
 nav {
@@ -38,12 +44,14 @@ ul {
 
 ul.header-ul {
     height: 100%;
+    display: flex;
+    justify-content: space-between;
 }
 
 ul.second-header-ul {
     height: 50%;
     justify-content: space-evenly;
-    background-color: white;
+    background-color: rgb(161, 106, 3);
     border-radius: 0 0 2em 2em;
 }
 
@@ -54,6 +62,14 @@ li {
 li.li-notif {
     width: 20px;
     height: 24px;
+}
+
+figure.header-figure{
+  display: flex;
+  align-items: center;
+  position: relative;
+  top: 10px;
+  color: rgb(255, 245, 226);
 }
 
 header a {
@@ -153,7 +169,7 @@ aside.user-aside {
 section {
     margin-bottom: 2em;
     padding: 30px;
-    background: white;
+    background: rgb(255, 245, 216);
     border-radius: 50px;
 }
 
@@ -180,6 +196,7 @@ section.notif {
 }
 
 section.login {
+    font-size: medium;
     background: rgba(255, 255, 255, 0.637);
     width: 35%;
 }
@@ -235,8 +252,11 @@ h1 {
 
 
 img {
-    max-width: 10em;
-    max-height: 10em;
+    max-width: 50em;
+}
+
+.img-block {
+    display: block;
 }
 
 a.profile-btn {
@@ -249,26 +269,126 @@ a.profile-btn {
 // *** Footer ***
 
 footer {
+    background-color: #7c2f11;
+    margin-top: 300px;
+  }
+  .container {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  .container .content {
     display: flex;
-    justify-content: space-around;
+    padding: 50px;
+    justify-content: space-between;
+  }
+  .container .content .col {
+    display: flex;
+    flex-direction: column;
+  }
+  .container .content p:first-child:not(.flex p:first-child) {
+    color: white;
+    font-size: 22px;
+  }
+  .container .content p:not(.col, .column p:first-child) {
+    color: rgb(136, 136, 136);
+    margin-bottom: 10px;
+  }
+  .container .content .col:first-child {
+    gap: 25px;
+  }
+  .container .content .col:first-child .flex {
+    display: flex;
+    gap: 50px;
+  }
+  .container .content .col:first-child .flex .col-info {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .container .content .col:first-child .flex .col-info p {
+    font-size: 14px;
+  }
+  .container .content .col:first-child .flex .col-info span {
+    color: white;
+    font-size: 17px;
+  }
+  .container .content .col .column:first-child {
+    margin-right: 50px;
+  }
+  
+  .container .content .col .column p:first-child {
+    margin-bottom: 25px;
+  }
+  .container .content .col .column p:not(p:first-child) {
+    margin-bottom: 12px;
+  }
+  .container .content .col:last-child {
+    gap: 15px;
+  }
+  .container .content .col:last-child .email {
+    display: flex;
+  }
+  .container .content .col:last-child .email input {
+    width: 300px;
+    height: 40px;
+    font-size: 17px;
+    color: white;
+    background-color: rgb(76, 76, 76);
+    padding-left: 10px;
+    border: 0;
+    outline: 0;
+  }
+  .container .content .col:last-child .email button {
+    width: 200px;
+    height: 40px;
+    color: white;
+    background-color: rgb(229, 39, 39);
+    padding-left: 10px;
+    border: 0;
+    outline: 0;
+    text-align: center;
+    margin-left: -30px;
+    font-weight: bold;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
     align-items: center;
-    flex-shrink: 0;
-    width: 100%;
-    background: rgb(53, 53, 53);
-    color: rgb(255, 255, 255);
-    margin-top: 50px;
-    padding: 1em 0;
-    position: absolute;
-}
-
-.figure-footer {
+    border-radius: 3px;
+  }
+  .container .content .col:last-child .social {
     display: flex;
-    align-items: flex-end;
-    margin: 0;
-}
-
-.footer-logo {
-    height: 50px;
-    width: 50px;
-}
+    gap: 20px;
+  }
+  .container .content .col:last-child .social img {
+    width: 40px;
+  }
+  .content-foot {
+    background-color: rgb(78, 0, 0);
+    display: flex;
+    justify-content: center;
+  }
+   .content-foot .foot-text{
+    padding: 25px 80px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .content-foot p {
+    color: rgb(136, 136, 136);
+  }
+  .content-foot .container p span {
+    color: white;
+    font-weight: bold;
+  }
+  .content-foot .container .pay {
+    display: flex;
+    gap: 20px;
+  }
+  .content-foot .container .pay img {
+    width: 70px;
+    height: 40px;
+    object-fit: contain;
+    background-color: white;
+    padding: 10px 5px;
+  }
+  
 // *** End of Footer ***

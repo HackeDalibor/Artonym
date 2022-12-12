@@ -1,22 +1,16 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Log in!{% endblock %}
-{% block bodystyle %}
-    style="
-            background: url({{ asset('/uploads/images/siteimage/background-photo.jpeg') }});
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-        "
-{% endblock %}
 {% block body %}
 <section class="login">
-    faire texte de présentation du site , explication , en utilisant les balises strong et em pour le référencement
+    <h1>WELCOME TO <strong>ARTONYM</strong></h1>
+    <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius laudantium amet assumenda blanditiis hic animi, enim explicabo incidunt maxime excepturi.</div>
+    <div>Lorem ipsum dolor sit amet.</div>
 </section>
     <section class="login">
 
     
-        <h1 class="h3 mb-3 font-weight-normal">Login</h1>
+        <h2 class="h3 mb-3 font-weight-normal">Login</h2>
 
         <form method="post">
             {% if error %}
@@ -56,6 +50,7 @@
             </button>
         </form>
         <p class="form-login">Forgot password ? <a href="{{ path('app_forgot_password_request') }}">Click here !</a></p>
+        <p class="form-login">Don't have an account ? <a href="{{ path('app_register') }}">Register !</a></p>
     </section>
 
 

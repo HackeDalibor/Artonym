@@ -49,18 +49,12 @@ class NotificationService
             $user->addNotification($notification);
             $this->notificationRepository->add($notification, true);
 
+        } elseif (get_class($object) === 'App\Entity\Reacton') {
+            $notification = new Notification();
+            $notification->setDescription($object->getUser()->getNickname()." liked your post.");
+            $notification->setUser($object->getSubject()->getUser());
+            $this->notificationRepository->add($notification, true);
         }
-        // TODO : When Reaction entity is done this will create the new notification 
-        // elseif (get_class($object) === 'App\Entity\Reacton') {
-        //     foreach($user->getLikedSubjects() as $likedSubject)
-        //     {
-        //         $notification = new Notification();
-        //         $notification->setDescription($user->getNickname()." liked your post.");
-        //         $notification->setUser($likedSubject->getUser());
-        //         $likedSubject->getUser()->addNotification($notification);
-        //         $this->notificationRepository->add($notification, true);
-        //     }
-        // }
     }
 
 }

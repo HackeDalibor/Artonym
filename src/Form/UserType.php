@@ -22,7 +22,8 @@ class UserType extends AbstractType
                 'attr' => ["class" => "form-control"]
             ])
             ->add('biography', TextareaType::class, [
-                'attr' => ["class" => "form-control"]
+                'attr' => ["class" => "form-control"],
+                'required' => false
             ])
             // ->add('roles')
             // ->add('status')

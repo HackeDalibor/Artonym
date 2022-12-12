@@ -66,6 +66,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $query->getQuery()->getResult();
     }
 
+    public function findFollowers($id) {
+        return $this->createQueryBuilder('u')
+                    ->innerJoin('u.followers', 'f')
+                    ->where('f.id = :followed')
+                    ->setParameter('followed', $id)
+                    ->orderBy('f.inscriptionDate', 'DESC');
+    }
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

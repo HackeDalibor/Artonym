@@ -1,0 +1,208 @@
+@media screen and (max-width: 1200px) {
+
+    // body {
+    //     margin: 0;
+    //     padding: 0;
+    //     overflow-x: hidden;
+    //     font-family: sans-serif;
+    //     background: #1e3c72;
+    // }
+    
+    #burger-menu {
+        cursor: pointer;
+        height: 27px;
+        width: 27px;
+        margin: 50px;
+        overflow: visible;
+        position: relative;
+        z-index: 2;
+    
+        // THE LINES
+        span.span-nav,
+        span.span-nav:before,
+        span.span-nav:after {
+            background: #fff;
+            display: block;
+            height: 2px;
+            opacity: 1;
+            position: absolute;
+            transition: 0.3s ease-in-out;
+        }
+    
+        span.span-nav:before,
+        span.span-nav:after {
+            content: '';
+        }
+    
+        // TOP
+        span.span-nav:before {
+            left: 0px;
+            top: -10px;
+            width: 27px;
+        }
+    
+        // MIDDLE
+        span.span-nav {
+            right: 0px;
+            top: 13px;
+            width: 27px;
+        }
+    
+        // BOTTOM
+        span.span-nav:after {
+            left: 0px;
+            top: 10px;
+            width: 27px;
+        }
+    
+        // ROTATION ON CLICK
+        &.close {
+            // TOP
+            span.span-nav:before {
+                top: 0px;
+                transform: rotate(90deg);
+                width: 27px;
+            }
+    
+            // MIDDLE
+            span.span-nav {
+                transform: rotate(-45deg);
+                top: 13px;
+                width: 27px;
+            }
+    
+            // BOTTOM
+            span.span-nav:after {
+                top: 0px;
+                left: 0;
+                transform: rotate(90deg);
+                opacity: 0;
+                width: 0;
+            }
+        }
+    }
+    
+    #menu {
+        z-index: 1;
+        min-width: 100%;
+        min-height: 100%;
+        position: fixed;
+        top: 0;
+        height: 0;
+        visibility: hidden;
+        opacity: 0;
+        text-align: center;
+        padding-top: 20px;
+        transition: all 0.3s ease-in-out;
+    
+        &.overlay {
+            visibility: visible;
+            opacity: 1;
+            padding-top: 100px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+    
+        ul.menu-ul {
+            padding: 0;
+        }
+    
+        li.menu-li {
+            list-style: none;
+        }
+    
+        a.menu-a {
+            color: #fff;
+            display: block;
+            font-size: 32px;
+            margin-bottom: 30px;
+            text-decoration: none;
+        }
+    }  
+    
+    // *** MAIN ***
+
+    main {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    // *** SECTION ***
+
+    section.login {
+        width: 70%;
+    }
+
+    // *** END OF MAIN ***
+
+    // *** FOOTER ***
+
+    footer {
+        margin-top: 150px;
+    }
+
+    .container {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .content {
+        flex-wrap: wrap;
+    }
+
+}
+@media screen and (max-width: 550px) {
+
+    // *** SECTION ***
+
+    .login {
+        width: 90% !important;
+        font-size: x-large !important;
+    }
+
+    // *** END OF SECTION ***
+
+    // *** FOOTER ***
+
+    footer {
+        margin-top: 0;
+    }
+
+    div.email {
+        flex-wrap: wrap;
+    }
+
+    .container .content .col:last-child .email button {
+        position: relative;
+        left: 30px;
+    }
+}
+@media screen and (max-width: 375px) {
+
+    main {
+        padding: 150px 0 0 0;
+    }
+
+    .login {
+        width: 95% !important;
+        font-size: large !important;
+    }
+
+    .container .content {
+        padding: 50px 0;
+    }
+
+    .container .content .col:last-child .email input {
+        width: 90%;
+    }
+}
+@media screen and (max-width: 250px) {
+
+    main {
+        padding: 130px 0 0 0;
+    }
+
+    .login {
+        width: 95% !important;
+        font-size: small !important;
+    }
+}

@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Entity\Message;
+use App\Repository\UserRepository;
 use Symfony\Component\Form\AbstractType;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -17,7 +18,7 @@ class MessageType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        // dd($options['user']);
+        $id = $options['id'];
         $builder
             ->add('sender', HiddenType::class, [
                 "empty_data" => $options['user']
@@ -29,7 +30,10 @@ class MessageType extends AbstractType
             ->add('reciever', EntityType::class, [
                 "class" => User::class,
                 "choice_label" => "nickname",
-                'attr' => ["class" => "form-control"]
+                'attr' => ["class" => "form-control"],
+                'query_builder' => function(UserRepository $userRepository) use($id) {
+                    return $userRepository->findFollowers($id);
+                }
             ])
             ->add('submit', SubmitType::class, [
                 "attr" => ["class" => "btn btn-primary"]
@@ -44,7 +48,8 @@ class MessageType extends AbstractType
         ]);
 
         $resolver->setRequired([
-            'user'
+            'user',
+            'id'
         ]);
     }
 }

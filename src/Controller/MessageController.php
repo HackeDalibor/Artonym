@@ -31,8 +31,7 @@ class MessageController extends AbstractController
         $message = new Message;
         // Création d'un nouvel objet "Message"
 
-
-        $form = $this->createForm(MessageType::class, $message, ['user' => $user]);
+        $form = $this->createForm(MessageType::class, $message, ['user' => $user, 'id' => $user->getId()]);
         // Création d'un formulaire en passant par la table "MessageFormType"
         
         $form->handleRequest($request);

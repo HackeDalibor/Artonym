@@ -2,14 +2,6 @@
 
 {% block title %}Register{% endblock %}
 
-{% block bodystyle %}
-    style="
-            background: url({{ asset('/uploads/images/siteimage/background-photo.jpeg') }});
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-        "
-{% endblock %}
 {% block body %}
     <section class="register login">
         {% for flash_error in app.flashes('verify_email_error') %}
@@ -30,5 +22,6 @@
 
             <button type="submit" class="btn btn-dark">Register</button>
         {{ form_end(registrationForm) }}
+        <p class="login-form">Already have an account ? <a href="{{ path('app_login') }}">Login !</a></p>
     </section>
 {% endblock %}

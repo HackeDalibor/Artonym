@@ -22,6 +22,7 @@
                     
                 {% endfor %}
             </ul>
+            <p>{{ subject.description }}</p>
             <a href="{{ path('app_subject_reacted', {'id': subject.id}) }}" class="btn btn-link js-like">
                 {% if app.user and subject.isReactedByUser(app.user) %}
                     <i class="fas fa-thumbs-up"></i>
